@@ -1,0 +1,94 @@
+ <html> 
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        body {font-size:14px;
+		/*
+		font-family:
+			 -apple-system, BlinkMacSystemFont,
+			 "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+			 "Helvetica Neue", sans-serif;	
+		*/
+		}
+        p.p1 {text-indent: 0em; font-size:17px;font-weight:bold; color:darkgreen}
+        p.p2 {text-indent: 0em; font-size:15px;font-weight:bold}
+        p.p3 {text-indent: 0em; font-size:14px;font-weight:bold}
+		.article {width: 800px; margin:0 auto;font-size:14px;font-weight:normal;}
+        .paragraph {text-indent: 2em; font-size:13px;}
+        .link {text-indent: 6em; font-size:13px;}
+        .pix {text-indent: 6em; }
+        .refer {text-indent: 6em; font-size:13px; color:darkblue}
+        ol.inside {list-style-position: inside; text-indent: 2em;}
+        .description {font-size:14px; padding: 5px; background-color:#336633; font-weight:bord; color: white}
+        .codes {font-size:14px; padding: 5px; background-color:black; font-weight:normal; color: #CCFF99}
+		.table1 {font-size:14px; width:90%; border-collapse:collapse; border:solid 1px;}
+		tr {border:solid#000 1px;}
+		td {border:solid#000 1px; }
+		.Header { font-weight:bold; text-align:center;}
+		.Data {font-weight:normal; text-align:left; }
+		ul.inside {list-style-position: inside; text-indent: 2em;}
+    </style>
+</head> 
+<body> 
+<body class="article"> 
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a> 
+
+<h2 align="center">50. Product of Array Exclude Itself</h2>
+
+<P class="p2">Description of the Problem</P>
+<P class="link"><a href="https://www.lintcode.com/problem/product-of-array-exclude-itself/description" target="_blank">https://www.lintcode.com/problem/product-of-array-exclude-itself/description</a></P>
+<pre class="description">
+
+50. Product of Array Exclude Itself
+
+Given an integers array A.
+
+Define B[i] = A[0] * ... * A[i-1] * A[i+1] * ... * A[n-1], calculate B WITHOUT divide operation.
+Example
+
+For A = [1, 2, 3], return [6, 3, 2].
+
+</code>
+</pre>	
+
+<P class="p2">Idea to solve the problem</P>
+<P class="paragraph">Dynamic Programming</P>
+
+<P class="p2">My codes</P>
+<pre class="codes">
+<code>
+
+
+public class Solution {
+    /*
+     * @param nums: Given an integers array A
+     * @return: A long long array B and B[i]= A[0] * ... * A[i-1] * A[i+1] * ... * A[n-1]
+     */
+    // Total runtime 1822 ms. Your submission beats 99.60% Submissions!
+    public List<Long> productExcludeItself(List<Integer> nums) {
+        int len = nums.size();
+        long[] left = new long[len];
+        long[] right = new long[len];
+        left[0] = 1;
+        right[len - 1] = 1;
+        for (int i=1; i < len; i++) {
+            left[i] = left[i-1] * nums.get(i-1);
+            int j = len - 1 - i;
+            right[j] = right[j+1] * nums.get(j+1);
+        }
+        List<Long> result = new ArrayList<>();
+        for (int i=0; i < nums.size(); i++) {
+            result.add( left[i] * right[i] );
+        }
+        return result;
+    }
+}
+
+</code>
+</pre>
+
+
+
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a> 	
+</body> 
+</html>

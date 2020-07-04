@@ -1,0 +1,149 @@
+ <html> 
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        body {font-size:14px;
+		/*
+		font-family:
+			 -apple-system, BlinkMacSystemFont,
+			 "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+			 "Helvetica Neue", sans-serif;	
+		*/
+		}
+        p.p1 {text-indent: 0em; font-size:17px;font-weight:bold; color:darkgreen}
+        p.p2 {text-indent: 0em; font-size:15px;font-weight:bold}
+        p.p3 {text-indent: 0em; font-size:14px;font-weight:bold}
+		.article {width: 800px; margin:0 auto;font-size:14px;font-weight:normal;}
+        .paragraph {text-indent: 2em; font-size:13px;}
+        .link {text-indent: 6em; font-size:13px;}
+        .pix {text-indent: 6em; }
+        .refer {text-indent: 6em; font-size:13px; color:darkblue}
+        ol.inside {list-style-position: inside; text-indent: 2em;}
+        .description {font-size:14px; padding: 5px; background-color:#336633; font-weight:bord; color: white}
+        .codes {font-size:14px; padding: 5px; background-color:black; font-weight:normal; color: #CCFF99}
+		.table1 {font-size:14px; width:90%; border-collapse:collapse; border:solid 1px;}
+		tr {border:solid#000 1px;}
+		td {border:solid#000 1px; }
+		.Header { font-weight:bold; text-align:center;}
+		.Data {font-weight:normal; text-align:left; }
+		ul.inside {list-style-position: inside; text-indent: 2em;}
+    </style>
+</head> 
+<body> 
+<body class="article"> 
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a> 
+
+<h2 align="center">Find All Anagrams in a String</h2>
+
+<P class="p2">Description of the Problem</P>
+<P class="link"><a href="https://www.lintcode.com/problem/find-all-anagrams-in-a-string/description" target="_blank">https://www.lintcode.com/problem/find-all-anagrams-in-a-string/description</a></P>
+<pre class="description">
+
+647. Find All Anagrams in a String
+
+Given a string s and a non-empty string p, find all the start indices of p's anagrams in s.
+
+Strings consists of lowercase English letters only and the length of both strings s and p 
+will not be larger than 40,000.
+
+The order of output does not matter.
+Example
+
+Given s = "cbaebabacd" p = "abc"
+
+return [0, 6]
+
+</code>
+</pre>	
+
+<P class="p2">Idea to solve the problem</P>
+<P class="paragraph">Sliding window. Using integer array as HashMap.</P>
+
+<P class="p2">My codes</P>
+<pre class="codes">
+<code>
+
+
+public class Solution {
+    /**
+     * @param s: a string
+     * @param p: a string
+     * @return: a list of index
+     */
+     // Total runtime 2056 ms. Your submission beats 96.60% Submissions!
+    public static List<Integer> findAnagrams(String s, String p) {
+        List<Integer> result = new ArrayList();
+        if (s == null || p == null || s.length() < p.length() || p.length() == 0) {
+            return result;
+        }
+        int[] pmap = new int[256];
+        int[] smap = new int[256];
+        for (int i = 0; i < p.length(); i++) {
+            pmap[p.charAt(i)]++;
+        }
+        int left = 0, right = 0;
+        while (right < s.length() ) {
+          int c = s.charAt(right);
+          if ( pmap[c] == 0 ) {
+            smap = new int[256];
+            right++;
+            left = right;
+            continue;
+          }
+          smap[c]++;
+          if ( right - left + 1 == p.length() ) {
+            if (compareMap(pmap, smap)) {
+               result.add(left);
+            }
+            smap[s.charAt(left++)]--;
+          }
+          right++;          
+        }
+        return result;
+    }
+     
+     // Total runtime 2229 ms. Your submission beats 89.80% Submissions!
+    public static List<Integer> findAnagrams2(String s, String p) {
+        List<Integer> result = new ArrayList();
+        if (s == null || p == null || s.length() < p.length() || p.length() == 0) {
+            return result;
+        }
+        int[] pmap = new int[256];
+        int[] smap = new int[256];
+        for (int i = 0; i < p.length(); i++) {
+            pmap[p.charAt(i)]++;
+        }
+        char lastc=0,thisc;
+        for (int i = 0; i < s.length(); i++) {
+            thisc = s.charAt(i);
+            smap[thisc]++;
+            if ( i >= p.length() - 1 ) {
+               if ( i >= p.length() ) {
+                  lastc = s.charAt(i - p.length());
+                  smap[lastc]--;
+                }
+                if (compareMap(pmap, smap)) {
+                  result.add(i - p.length() + 1);
+                }
+            }
+        }
+        return result;
+    }
+
+    private static boolean compareMap(int[] a, int[] b) {
+        for (int i=0; i < a.length; i++) {
+           if ( a[i] != b[i] ) return false;
+        }
+        return true;
+    }
+   
+}
+
+</code>
+</pre>
+
+
+
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a> 	
+</body> 
+</html>

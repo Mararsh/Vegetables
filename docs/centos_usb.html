@@ -1,0 +1,74 @@
+<html> 
+<head> 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        body {font-size:14px;
+		/*
+		font-family:
+			 -apple-system, BlinkMacSystemFont,
+			 "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+			 "Helvetica Neue", sans-serif;	
+		*/
+		}
+        p.p1 {text-indent: 0em; font-size:17px;font-weight:bold; color:darkgreen}
+        p.p2 {text-indent: 0em; font-size:15px;font-weight:bold}
+        p.p3 {text-indent: 0em; font-size:14px;font-weight:bold}
+		.article {width: 800px; margin:0 auto;font-size:14px;font-weight:normal;}
+        .paragraph {text-indent: 2em; font-size:13px;}
+        .link {text-indent: 6em; font-size:13px;}
+        .pix {text-indent: 6em; }
+        .refer {text-indent: 6em; font-size:13px; color:darkblue}
+        ol.inside {list-style-position: inside; text-indent: 2em;}
+        .description {font-size:14px; padding: 5px; background-color:#336633; font-weight:bord; color: white}
+        .codes {font-size:14px; padding: 5px; background-color:black; font-weight:normal; color: #CCFF99}
+		.table1 {font-size:14px; width:90%; border-collapse:collapse; border:solid 1px;}
+		tr {border:solid#000 1px;}
+		td {border:solid#000 1px; }
+		.Header { font-weight:bold; text-align:center;}
+		.Data {font-weight:normal; text-align:left; }
+		ul.inside {list-style-position: inside; text-indent: 2em;}
+    </style>
+</head> 
+<body class="article"> 
+<a href="https://github.com/Mararsh/Vegetables"><img src="home.jpg" width=60px></a> 
+<h2 align="center">利用USB安装CentOS</h2>
+
+<P class="p1">参考资料</P>
+<P class="link"><a href="https://blog.csdn.net/happy_joker/article/details/52822025" target="_blank">https://blog.csdn.net/happy_joker/article/details/52822025</a></P>
+<P class="link"><a href="https://www.augsky.com/599.html" target="_blank">https://www.augsky.com/599.html</a></P>
+
+<P class="p1">背景</P>
+<P class="paragraph">如果有旧电脑或者旧笔记本，则可以把它安装成linux系统用来开发或者运行程序。CentOS是强大的Linux服务器版本，选择它有利于实现高性能计算。</P>
+<P class="paragraph">CentOS的完整安装介质有9G多，即使是最小安装介质也是900M+：</P>
+<P class="link"><a href="https://www.centos.org/download/" target="_blank">https://www.centos.org/download/</a></P>
+<P class="paragraph">不建议利用光盘进行最小安装：现在多数机器没有光驱，刻盘还需要空光盘、刻盘过程耗时；而且最小安装的后续是自行下载安装大量必备软件，费时费力易错。</P>
+<P class="paragraph">因此，利用USB完整安装CentOS是好的选择。</P>
+
+
+<P class="p1">准备</P>
+<P class="paragraph">下载以下CentOS介质（或者国内任意镜像）：</P>
+<P class="link"><a href="http://mirrors.tuna.tsinghua.edu.cn/centos/7/isos/x86_64/CentOS-7-x86_64-Everything-1804.iso " target="_blank">http://mirrors.tuna.tsinghua.edu.cn/centos/7/isos/x86_64/CentOS-7-x86_64-Everything-1804.iso </a></P>
+<P class="paragraph">下载UltraISO（免费试用版就够了）：</P>
+<P class="link"><a href="https://cn.ultraiso.net/xiazai.html" target="_blank">https://cn.ultraiso.net/xiazai.html</a></P>
+<P class="paragraph">准备一个至少10G的USB盘，其所有内容将被覆盖，因此确保USB盘上有用的内容已备份到别处。安装完毕CentOS以后，此盘可以格式化或者保存其它内容。</P>
+
+<P class="p1">把安装介质写入USB盘</P>
+<P class="paragraph">参见第一个网址，图文都很详细了。写USB的速度比写光盘的速度快多了。</P>
+
+<P class="p1">修改电脑的BIOS</P>
+<P class="paragraph">我的机器是HP笔记本，修改BIOS过程是：重启机器、点击ESC、点击F10，进入BIOS，点击系统、Boot Options、Boot Order，把USB启动移到最顶部。</P>
+
+<P class="p1">安装CentOS</P>
+<P class="paragraph">把USB插入电脑。安装过程参见第一个网址，图文都很详细了。我的安装步骤为：</P>
+<P class="paragraph">1）重启机器，在CentOS安装界面，选择“Install CentOS 7”、点击Tab键</P>
+<P class="paragraph">2）将命令修改为：>vmlinuz initrd=initrd.img linux dd quiet</P>
+<P class="paragraph">3）重启机器，观察磁盘驱动器，最后一个应该就是USB盘，是“sdb4”（不同机器可能不同）</P>
+<P class="paragraph">4）重启机器，在CentOS安装界面，选择“Install CentOS 7”、点击Tab键</P>
+<P class="paragraph">5）将命令修改为：>vmlinuz initrd=initrd.img inst.stage2=hd:/dev/sdb4  quiet</P>
+<P class="paragraph">6）回车，开始安装</P>
+
+
+
+<a href="https://github.com/Mararsh/Vegetables"><img src="home.jpg" width=60px></a> 
+</body> 
+</html>

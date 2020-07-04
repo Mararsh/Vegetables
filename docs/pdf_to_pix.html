@@ -1,0 +1,94 @@
+<html> 
+<head> 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        body {font-size:14px;
+		/*
+		font-family:
+			 -apple-system, BlinkMacSystemFont,
+			 "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+			 "Helvetica Neue", sans-serif;	
+		*/
+		}
+        p.p1 {text-indent: 0em; font-size:17px;font-weight:bold; color:darkgreen}
+        p.p2 {text-indent: 0em; font-size:15px;font-weight:bold}
+        p.p3 {text-indent: 0em; font-size:14px;font-weight:bold}
+		.article {width: 800px; margin:0 auto;font-size:14px;font-weight:normal;}
+        .paragraph {text-indent: 2em; font-size:13px;}
+        .link {text-indent: 6em; font-size:13px;}
+        .command {text-indent: 6em; font-size:13px; color:darkblue}
+        .pix {text-indent: 6em; }
+        .refer {text-indent: 6em; font-size:13px; color:darkblue}
+        ol.inside {list-style-position: inside; text-indent: 2em;}
+        .description {font-size:14px; padding: 5px; background-color:#336633; font-weight:bord; color: white}
+        .codes {font-size:14px; padding: 5px; background-color:black; font-weight:normal; color: #CCFF99}
+		.table1 {font-size:14px; width:90%; border-collapse:collapse; border:solid 1px;}
+		tr {border:solid#000 1px;}
+		td {border:solid#000 1px; }
+		.Header { font-weight:bold; text-align:center;}
+		.Data {font-weight:normal; text-align:left; }
+		ul.inside {list-style-position: inside; text-indent: 2em;}
+    </style>
+</head> 
+<body class="article"> 
+<a href="https://github.com/Mararsh/Vegetables"><img src="home.jpg" width=60px></a> 
+<h2 align="center">利用ImageMagick把PDF转换为图片</h2>
+
+<P class="p1">参考资料</P>
+<P class="link"><a href="https://stackoverflow.com/questions/653380/converting-a-pdf-to-png/15484727#15484727" target="_blank">https://stackoverflow.com/questions/653380/converting-a-pdf-to-png/15484727#15484727</a></P>
+<P class="link"><a href="https://stackoverflow.com/questions/6605006/convert-pdf-to-image-with-high-resolution" target="_blank">https://stackoverflow.com/questions/6605006/convert-pdf-to-image-with-high-resolution</a></P>
+<P class="link"><a href="https://blog.csdn.net/geekcome/article/details/6385074" target="_blank">https://blog.csdn.net/geekcome/article/details/6385074</a></P>
+
+<P class="p1">背景</P>
+<P class="paragraph">我最近想从古画里截取一些素材，下载到的资料都是PDF格式的，于是有了把PDF转换图片的需求。</P>
+<P class="paragraph">ImageMagick是公认的高效图片转换工具，在Linux上有缺省安装，也有Windows版和Mac版可用。</P>
+
+<P class="p1">下载安装</P>
+<P class="paragraph">ImageMagick官网地址，建议下载Q16-HDRI的static版本：</P>
+<P class="link"><a href="http://www.imagemagick.org/" target="_blank">http://www.imagemagick.org/</a></P>
+<P class="paragraph">ImageMagick实际是调用ghostscript来处理PDF，因此还需要下载安装ghostscript（Linux一般缺省安装）：</P>
+<P class="link"><a href="https://ghostscript.com/download/gsdnld.html" target="_blank">https://ghostscript.com/download/gsdnld.html</a></P>
+
+<P class="p1">执行命令</P>
+<P class="paragraph">ImageMagick安装完毕以后，在命令窗口中执行以下命令，可以把PDF转换为多个图片文件：</P>
+<P class="command">magick  convert   pdf文件名    图片名前缀.图片类型后缀</P>
+
+<P class="p1">问题1：转换的图片质量不高</P>
+<P class="paragraph">要转换为高质量的图片，需要使用参数，如下示例：</P>
+<P class="command">magick convert -quality 100 -density 300 -units PixelsPerInch D:\芥子园画谱\芥子园画谱.pdf  D:\芥子园画谱.png</P>
+<P class="paragraph">表示不压缩（100%质量）、像素密度300。这样的参数输出的图片质量已经非常高了。</P>
+
+<P class="p1">问题2：系统盘空间被耗尽</P>
+<P class="paragraph">比如，我的PDF有360页，ImageMagick在Windows上运行时，直接吃掉了C盘剩余的所有39G空间、把系统拖得非常迟钝、然后中断运行、只输出了320个图片文件。</P>
+<P class="paragraph">原因是ImageMagick多线程处理、并且把缓存写到硬盘上。以下网页介绍了ImageMagick架构和最佳实践：</P>
+<P class="link"><a href="http://www.imagemagick.org/script/architecture.php#cache" target="_blank">http://www.imagemagick.org/script/architecture.php#cache</a></P>
+<P class="paragraph">缓存参数的配置方式是编辑安装目录下的文件“policy.xml”，设置“temporary-path”为一个足够大的硬盘目录，而不是用缺省的系统硬盘的临时目录：</P>
+<pre class="codes">
+<code>
+&ltpolicymap&gt
+  &ltpolicy domain="resource" name="temporary-path" value="D:\tmp"/&gt
+  &ltpolicy domain="resource" name="memory" value="4GiB"/&gt 
+  &lt!-- &ltpolicy domain="resource" name="map" value="4GiB"/&gt --&gt
+  &lt!-- &ltpolicy domain="resource" name="width" value="10MP"/&gt --&gt
+  &lt!-- &ltpolicy domain="resource" name="height" value="10MP"/&gt --&gt
+  &lt!-- &ltpolicy domain="resource" name="area" value="1GB"/&gt --&gt
+  &lt!-- &ltpolicy domain="resource" name="disk" value="16EB"/&gt --&gt
+ &ltpolicy domain="resource" name="file" value="20"/&gt 
+ &ltpolicy domain="resource" name="thread" value="4"/&gt 
+  &lt!-- &ltpolicy domain="resource" name="throttle" value="0"/&gt --&gt
+  &lt!-- &ltpolicy domain="resource" name="time" value="3600"/&gt --&gt
+  &lt!-- &ltpolicy domain="system" name="precision" value="6"/&gt --&gt
+  &lt!-- &ltpolicy domain="coder" rights="none" pattern="MVG" /&gt --&gt
+  &lt!-- &ltpolicy domain="delegate" rights="none" pattern="HTTPS" /&gt --&gt
+  &lt!-- &ltpolicy domain="path" rights="none" pattern="@*" /&gt --&gt
+  &ltpolicy domain="cache" name="shared-secret" value="passphrase" stealth="true"/&gt
+&lt/policymap&gt
+</code>
+</pre>	
+<P class="paragraph">如果没有足够大的硬盘，则可以用工具把PDF文件分割成若干小文件再转换。以下免费开源的PDF分割工具很好使：</P>
+<P class="link"><a href="http://www.pdfsam.org/" target="_blank">http://www.pdfsam.org/</a></P>
+
+
+<a href="https://github.com/Mararsh/Vegetables"><img src="home.jpg" width=60px></a> 
+</body> 
+</html>

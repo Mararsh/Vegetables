@@ -1,0 +1,147 @@
+ <html> 
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        body {font-size:14px;
+		/*
+		font-family:
+			 -apple-system, BlinkMacSystemFont,
+			 "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+			 "Helvetica Neue", sans-serif;	
+		*/
+		}
+        p.p1 {text-indent: 0em; font-size:17px;font-weight:bold; color:darkgreen}
+        p.p2 {text-indent: 0em; font-size:15px;font-weight:bold}
+        p.p3 {text-indent: 0em; font-size:14px;font-weight:bold}
+		.article {width: 800px; margin:0 auto;font-size:14px;font-weight:normal;}
+        .paragraph {text-indent: 2em; font-size:13px;}
+        .link {text-indent: 6em; font-size:13px;}
+        .pix {text-indent: 6em; }
+        .refer {text-indent: 6em; font-size:13px; color:darkblue}
+        ol.inside {list-style-position: inside; text-indent: 2em;}
+        .description {font-size:14px; padding: 5px; background-color:#336633; font-weight:bord; color: white}
+        .codes {font-size:14px; padding: 5px; background-color:black; font-weight:normal; color: #CCFF99}
+		.table1 {font-size:14px; width:90%; border-collapse:collapse; border:solid 1px;}
+		tr {border:solid#000 1px;}
+		td {border:solid#000 1px; }
+		.Header { font-weight:bold; text-align:center;}
+		.Data {font-weight:normal; text-align:left; }
+		ul.inside {list-style-position: inside; text-indent: 2em;}
+    </style>
+</head> 
+<body> 
+<body class="article"> 
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a> 
+
+<h2 align="center">7. Serialize and Deserialize Binary Tree</h2>
+
+<P class="p2">Description of the Problem</P>
+<P class="link"><a href="https://www.lintcode.com/problem/serialize-and-deserialize-binary-tree/description" target="_blank">https://www.lintcode.com/problem/serialize-and-deserialize-binary-tree/description</a></P>
+<pre class="description">
+
+7. Serialize and Deserialize Binary Tree
+
+Design an algorithm and write code to serialize and deserialize a binary tree. 
+Writing the tree to a file is called 'serialization' and reading back from the file to 
+reconstruct the exact same binary tree is 'deserialization'.
+Example
+
+An example of testdata: Binary tree {3,9,20,#,#,15,7}, denote the following structure:
+
+  3
+ / \
+9  20
+  /  \
+ 15   7
+
+Our data serialization use bfs traversal. This is just for when you got wrong answer 
+and want to debug the input.
+
+You can use other method to do serializaiton and deserialization.
+
+</code>
+</pre>	
+
+<P class="p2">Idea to solve the problem</P>
+<P class="paragraph">Travesal binary tree</P>
+
+<P class="p2">My codes</P>
+<pre class="codes">
+<code>
+
+
+/**
+ * Definition of TreeNode:
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
+ * }
+ */
+
+
+public class Solution {
+    /**
+     * This method will be invoked first, you should design your own algorithm 
+     * to serialize a binary tree which denote by a root node to a string which
+     * can be easily deserialized by your own "deserialize" method later.
+     */
+    // Total runtime 1209 ms. Your submission beats 93.60% Submissions!
+    public String serialize(TreeNode root) {
+        if ( root == null ) return null;
+        String result = "";
+        result = getString(root, result);
+        return result;
+    }
+    
+    public String getString(TreeNode n, String s) {
+        if ( n == null ) { 
+            s += ",#";
+            return s;
+        }
+        s += "," + n.val;
+        s = getString(n.left, s);
+        s = getString(n.right, s);
+        return s;
+    }
+
+    /**
+     * This method will be invoked second, the argument data is what exactly
+     * you serialized at method "serialize", that means the data is not given by
+     * system, it's given by your own serialize method. So the format of data is
+     * designed by yourself, and deserialize it here as you serialize it in 
+     * "serialize" method.
+     */
+    public TreeNode deserialize(String data) {
+        if ( data == null ) return null;
+        String[] values = data.split(",");
+        if ( values.length < 2 ) return null;
+        index = 1;
+        TreeNode tree = buildTree(values);
+        return tree;
+    }
+    
+    int index = 0;
+    public  TreeNode buildTree(String[] values) {
+        if ( index > values.length  || values[index].equals("#") ) {
+            index++;
+            return null;
+        } 
+        TreeNode node = new TreeNode(Integer.parseInt(values[index++]));
+        node.left = buildTree(values);
+        node.right = buildTree(values);
+        return node;
+    }    
+}
+
+</code>
+</pre>
+
+
+
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a> 	
+</body> 
+</html>

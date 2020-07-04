@@ -1,0 +1,68 @@
+ <html> 
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        body {font-size:14px;
+		/*
+		font-family:
+			 -apple-system, BlinkMacSystemFont,
+			 "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+			 "Helvetica Neue", sans-serif;	
+		*/
+		}
+        p.p1 {text-indent: 0em; font-size:17px;font-weight:bold; color:darkgreen}
+        p.p2 {text-indent: 0em; font-size:15px;font-weight:bold}
+        p.p3 {text-indent: 0em; font-size:14px;font-weight:bold}
+		.article {width: 800px; margin:0 auto;font-size:14px;font-weight:normal;}
+        .paragraph {text-indent: 2em; font-size:13px;}
+        .link {text-indent: 6em; font-size:13px;}
+        .pix {text-indent: 6em; }
+        .refer {text-indent: 6em; font-size:13px; color:darkblue}
+        ol.inside {list-style-position: inside; text-indent: 2em;}
+        .description {font-size:14px; padding: 5px; background-color:#336633; font-weight:bord; color: white}
+        .codes {font-size:14px; padding: 5px; background-color:black; font-weight:normal; color: #CCFF99}
+		.table1 {font-size:14px; width:90%; border-collapse:collapse; border:solid 1px;}
+		tr {border:solid#000 1px;}
+		td {border:solid#000 1px; }
+		.Header { font-weight:bold; text-align:center;}
+		.Data {font-weight:normal; text-align:left; }
+		ul.inside {list-style-position: inside; text-indent: 2em;}
+    </style>
+</head> 
+<body class="article"> 
+<a href="https://github.com/Mararsh/Vegetables"><img src="home.jpg" width=60px></a>	
+</BR>
+<h2 align="center">Solution of Avoiding "Stale Read" in Real-Time Data Flowing System</h2></BR>
+<P class="p1">Background of the Problem</P>
+	<div class="paragraph">
+		<p>Real-time data flowing systems have following characters:</p>
+			<ul  class="inside">
+				<li>New data are generated continually. Thousands of new data may come within a second in a heavy workload system.</li>
+				<li>Huge scale of historical data can be accumulated as time goes on.</li>
+				<li>Mostly, rapidly accumulated data are created or deleted but not updated.</li>
+				<li>Generally, record time of the data is one of keys for querying.</li>				
+			</ul>
+		<p>Typical real-time data flowing systems include industry monitoring systems, sensor monitoring systems, location services systems, e-business websites, telegraphy charging system, and servers logging systems.</p>
+	</div>
+
+<P class="p1">What's the Problem?</P>		
+	<div class="paragraph">
+		<p>Performance optimization is a key requirement for collection, storage, transformation, query, and statistic of data in real-time data flowing systems. In actual implementations, multiple levels of performance optimization technicals are developed, like following:</p>
+			<ul  class="inside">
+				<li>Separation of read and write. Delay due to locks can be avoided by writing on master database while reading on slave database.</li>
+				<li>Caches. Many caching technicals have been applied in every levels, such as pages loading at front-end and data persistences at back-end.</li>				
+				<li>Delayed loading. By only fetching and presenting necessary data, size of reading, transferring,and storing can be reduced.</li>
+			</ul>
+		<p>But problem "Stale Read" can arise when benefit from performance optimization technicals. For example, cache of persistence objects can cause queries of slave database unaware of data changes: When a row is updated in master database, slave database gets the update but its JPA cache does not know this row has been updated since the update comes from outside but not its JPA, and queries on slave database will get expired row. </p>
+		<p>How to avoid Stale Read while take advantage of performance optimization technicals?</p>
+	</div>
+
+<P class="p1">Solution of the Problem</P>		
+	<div class="paragraph">
+		<p>With my practices, persistence objects must be refreshed in master and slave databases when data is created or deleted. If a kind of data is never updated and only created or deleted, then Stale Read never happens against this kind of data. So the solution is to catalog the data in system, apply read-write separation along with caches safely upon data which never be updated, and do all operations on master database or close cache in persistence level upon the data which will be updated.</p>
+		<p>Luckily, core data in most real-time data flowing systems are only created or deleted. For instance, in location services system, largely accumulated data are coordinates values which are never changed once record and can take advantage of read-write separation and caches. While all operations about user management in the same system are in the master database since user data are changed frequently and performance may not be affected cause the data size is limited.</p>
+	</div>
+
+<a href="https://github.com/Mararsh/Vegetables"><img src="home.jpg" width=60px></a>	
+</body> 
+</html>

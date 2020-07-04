@@ -1,0 +1,821 @@
+<html> 
+<head> 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        body {font-size:14px;
+		/*
+		font-family:
+			 -apple-system, BlinkMacSystemFont,
+			 "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+			 "Helvetica Neue", sans-serif;	
+		*/
+		}
+        p.p1 {text-indent: 0em; font-size:17px;font-weight:bold; color:darkgreen}
+        p.p2 {text-indent: 0em; font-size:15px;font-weight:bold}
+        p.p3 {text-indent: 0em; font-size:14px;font-weight:bold}
+		.article {width: 800px; margin:0 auto;font-size:14px;font-weight:normal;}
+        .paragraph {text-indent: 2em; font-size:13px;}
+        .link {text-indent: 6em; font-size:13px;}
+        .pix {text-indent: 6em; }
+        .refer {text-indent: 6em; font-size:13px; color:darkblue}
+        ol.inside {list-style-position: inside; text-indent: 2em;}
+        .description {font-size:14px; padding: 5px; background-color:#336633; font-weight:bord; color: white}
+        .codes {font-size:14px; padding: 5px; background-color:black; font-weight:normal; color: #CCFF99}
+		.table1 {font-size:14px; width:90%; border-collapse:collapse; border:solid 1px;}
+		tr {border:solid#000 1px;}
+		td {border:solid#000 1px; }
+		.Header { font-weight:bold; text-align:center;}
+		.Data {font-weight:normal; text-align:left; }
+		ul.inside {list-style-position: inside; text-indent: 2em;}
+    </style>
+</head> 
+<body class="article"> 
+<a href="https://github.com/Mararsh/Vegetables"><img src="home.jpg" width=60px></a> 
+
+
+<h2 align="center">Floyd-Warshall Algorithm: Find shortest paths between vertexs</h2>
+
+<P class="p2">Target</P>
+<pre class="description">
+Given an undirected weighted graph, find shortest paths between all vertexs. 
+</pre>
+
+<P class="p2">Idea to solve the problem</P>
+<P class="paragraph">Track paths in Floyd-Warshall Algorithm</P>
+
+<P class="p2">My codes(Java)</P>
+<pre class="codes">
+<code>
+/*
+ * Author: Mara
+ * Date: 2018-5-15
+ * Target: Given an undirected weighted graph, find shortest paths between all vertexs.
+ */
+package algorithms;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class FloydWarshall {
+
+    static int vertexCount, edgeCount;
+    static int[][] weights;
+    static boolean[] determined;
+    static int[][] distance;
+    static int[][] previous; // previous[i][j] means the previous vertex of j in the path
+
+    public static void FloydWarshall() {
+        distance = new int[vertexCount + 1][vertexCount + 1];
+        previous = new int[vertexCount + 1][vertexCount + 1];
+
+        for (int i = 1; i &lt;= vertexCount; i++) {
+            for (int j = 1; j &lt;= vertexCount; j++) {
+                distance[i][j] = weights[i][j];
+                if (distance[i][j] != Integer.MAX_VALUE) {
+                    previous[i][j] = i;
+                }
+            }
+        }
+        System.out.println("The initialized distance matrix: ");
+        printMatrix(distance);
+        System.out.println("\n=================================================");
+
+        System.out.println("\nThe procedure of Floyd-Warshall algorithms for this graph: \n");
+
+        for (int k = 1; k &lt;= vertexCount; k++) {
+            System.out.println("\nWhen passing vertexs 1-" + k);
+            for (int i = 1; i &lt;= vertexCount; i++) {
+                for (int j = 1; j &lt;= vertexCount; j++) {
+                    if (distance[i][k] == Integer.MAX_VALUE
+                            || distance[k][j] == Integer.MAX_VALUE) {
+                        continue;
+                    }
+                    int w = distance[i][k] + distance[k][j];
+                    if (distance[i][j] &gt; w) {
+                        System.out.println("\tReplaced    [" + i + "," + j
+                                + "]   old:" + distance[i][j] + "   new:" + w);
+                        distance[i][j] = w;
+                        // Both previous[i][j] and previous[k][j] mean previous vertex before j.
+                        previous[i][j] = previous[k][j];
+                    }
+                }
+            }
+            printMatrix(distance);
+        }
+    }
+
+    public static void printPaths() {
+        System.out.println("\nThe final previous matrix is: ");
+        printMatrix(previous);
+
+        System.out.println("\n=================================================\n");
+        System.out.println("The final paths are following.\n");
+        for (int i = 1; i &lt;= vertexCount; i++) {
+            for (int j = 1; j &lt;= vertexCount; j++) {
+                if (i == j) {
+                    continue;
+                }
+                System.out.println("Shortest path size from vertex " + i
+                        + " to vertex " + j + " is: " + distance[i][j]);
+                List&lt;Integer&gt; path = buildPath(i, j);
+                System.out.print("\t\t" + i);
+                for (int k = 1; k &lt; path.size(); k++) {
+                    int w = weights[path.get(k - 1)][path.get(k)];
+                    System.out.print(" -(" + w + ")-&gt; " + path.get(k));
+                }
+                System.out.println("");
+            }
+        }
+    }
+
+    public static List&lt;Integer&gt; buildPath(int s, int e) {
+        if (distance[s][e] == Integer.MAX_VALUE) {
+            return new ArrayList&lt;&gt;();
+        }
+        List&lt;Integer&gt; path = new ArrayList&lt;&gt;();
+        path.add(e);
+        int k = previous[s][e];
+        while (k != s) {
+            path.add(0, k);
+            k = previous[s][k];
+        }
+        path.add(0, s);
+        return path;
+    }
+
+    // index in matrix are from 1 to length-1
+    public static void printMatrix(int[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        System.out.print("\n  ");
+        for (int j = 1; j &lt; cols; j++) {
+            System.out.print("    " + j);
+        }
+        System.out.println(" ");
+        for (int j = 0; j &lt; cols; j++) {
+            System.out.print("-----");
+        }
+        System.out.println(" ");
+        for (int i = 1; i &lt; rows; i++) {
+            System.out.print(i + ":");
+            for (int j = 1; j &lt; cols; j++) {
+                if (matrix[i][j] &lt; Integer.MAX_VALUE) {
+                    System.out.print("    " + matrix[i][j]);
+                } else {
+                    System.out.print("    *");
+                }
+            }
+            System.out.println(" ");
+        }
+    }
+
+    public static void getGraphData1() {
+        vertexCount = 5;
+        edgeCount = 6;
+        weights = new int[vertexCount + 1][edgeCount + 1];
+        weights[1][2] = 5;
+        weights[1][3] = 8;
+        weights[2][3] = 1;
+        weights[2][4] = 3;
+        weights[4][5] = 7;
+        weights[2][5] = 2;
+    }
+
+    public static void getGraphData2() {
+        vertexCount = 9;
+        edgeCount = 12;
+        weights = new int[vertexCount + 1][vertexCount + 1];
+        weights[1][2] = 18;
+        weights[1][3] = 4;
+        weights[1][4] = 5;
+        weights[2][4] = 13;
+        weights[2][9] = 2;
+        weights[3][4] = 1;
+        weights[3][6] = 6;
+        weights[4][5] = 10;
+        weights[4][6] = 5;
+        weights[5][9] = 5;
+        weights[6][7] = 2;
+        weights[7][8] = 2;
+        weights[8][9] = 6;
+    }
+
+    public static void initGraphData() {
+//        getGraphData1();
+        getGraphData2();
+        for (int i = 1; i &lt;= vertexCount; i++) {
+            for (int j = 1; j &lt;= vertexCount; j++) {
+                if (i == j) {
+                    weights[i][j] = 0;
+                } else if (weights[i][j] &gt; 0) {
+                    weights[j][i] = weights[i][j];
+                } else {
+                    weights[i][j] = Integer.MAX_VALUE;
+                }
+            }
+        }
+
+        System.out.println("Adjacent Matrix of the Graph:");
+        printMatrix(weights);
+
+    }
+
+    public static void main(String[] argv) {
+
+        initGraphData();
+
+        System.out.println("\nTarget: Find shortest paths between all vertexs");
+        System.out.println("\n=================================================\n");
+
+        FloydWarshall();
+
+        System.out.println("\n=================================================");
+        System.out.println("\nThe final shortest paths between vertexs:");
+        printMatrix(distance);
+
+        printPaths();
+    }
+}
+</code>
+</pre>	
+
+<P class="p2">The outputs for graph 1</P>
+<pre class="codes">
+Adjacent Matrix of the Graph:
+
+      1    2    3    4    5    6 
+----------------------------------- 
+1:    0    5    8    *    *    0 
+2:    5    0    1    3    2    0 
+3:    8    1    0    *    *    0 
+4:    *    3    *    0    7    0 
+5:    *    2    *    7    0    0 
+
+Target: Find shortest paths between all vertexs
+
+=================================================
+
+The initialized distance matrix: 
+
+      1    2    3    4    5 
+------------------------------ 
+1:    0    5    8    *    * 
+2:    5    0    1    3    2 
+3:    8    1    0    *    * 
+4:    *    3    *    0    7 
+5:    *    2    *    7    0 
+
+=================================================
+
+The procedure of Floyd-Warshall algorithms for this graph: 
+
+
+When passing vertexs 1-1
+
+      1    2    3    4    5 
+------------------------------ 
+1:    0    5    8    *    * 
+2:    5    0    1    3    2 
+3:    8    1    0    *    * 
+4:    *    3    *    0    7 
+5:    *    2    *    7    0 
+
+When passing vertexs 1-2
+	Replaced    [1,3]   old:8   new:6
+	Replaced    [1,4]   old:2147483647   new:8
+	Replaced    [1,5]   old:2147483647   new:7
+	Replaced    [3,1]   old:8   new:6
+	Replaced    [3,4]   old:2147483647   new:4
+	Replaced    [3,5]   old:2147483647   new:3
+	Replaced    [4,1]   old:2147483647   new:8
+	Replaced    [4,3]   old:2147483647   new:4
+	Replaced    [4,5]   old:7   new:5
+	Replaced    [5,1]   old:2147483647   new:7
+	Replaced    [5,3]   old:2147483647   new:3
+	Replaced    [5,4]   old:7   new:5
+
+      1    2    3    4    5 
+------------------------------ 
+1:    0    5    6    8    7 
+2:    5    0    1    3    2 
+3:    6    1    0    4    3 
+4:    8    3    4    0    5 
+5:    7    2    3    5    0 
+
+When passing vertexs 1-3
+
+      1    2    3    4    5 
+------------------------------ 
+1:    0    5    6    8    7 
+2:    5    0    1    3    2 
+3:    6    1    0    4    3 
+4:    8    3    4    0    5 
+5:    7    2    3    5    0 
+
+When passing vertexs 1-4
+
+      1    2    3    4    5 
+------------------------------ 
+1:    0    5    6    8    7 
+2:    5    0    1    3    2 
+3:    6    1    0    4    3 
+4:    8    3    4    0    5 
+5:    7    2    3    5    0 
+
+When passing vertexs 1-5
+
+      1    2    3    4    5 
+------------------------------ 
+1:    0    5    6    8    7 
+2:    5    0    1    3    2 
+3:    6    1    0    4    3 
+4:    8    3    4    0    5 
+5:    7    2    3    5    0 
+
+=================================================
+
+The final shortest paths between vertexs:
+
+      1    2    3    4    5 
+------------------------------ 
+1:    0    5    6    8    7 
+2:    5    0    1    3    2 
+3:    6    1    0    4    3 
+4:    8    3    4    0    5 
+5:    7    2    3    5    0 
+
+The final previous matrix is: 
+
+      1    2    3    4    5 
+------------------------------ 
+1:    1    1    2    2    2 
+2:    2    2    2    2    2 
+3:    2    3    3    2    2 
+4:    2    4    2    4    2 
+5:    2    5    2    2    5 
+
+=================================================
+
+The final paths are following.
+
+Shortest path size from vertex 1 to vertex 2 is: 5
+		1 -(5)-> 2
+Shortest path size from vertex 1 to vertex 3 is: 6
+		1 -(5)-> 2 -(1)-> 3
+Shortest path size from vertex 1 to vertex 4 is: 8
+		1 -(5)-> 2 -(3)-> 4
+Shortest path size from vertex 1 to vertex 5 is: 7
+		1 -(5)-> 2 -(2)-> 5
+Shortest path size from vertex 2 to vertex 1 is: 5
+		2 -(5)-> 1
+Shortest path size from vertex 2 to vertex 3 is: 1
+		2 -(1)-> 3
+Shortest path size from vertex 2 to vertex 4 is: 3
+		2 -(3)-> 4
+Shortest path size from vertex 2 to vertex 5 is: 2
+		2 -(2)-> 5
+Shortest path size from vertex 3 to vertex 1 is: 6
+		3 -(1)-> 2 -(5)-> 1
+Shortest path size from vertex 3 to vertex 2 is: 1
+		3 -(1)-> 2
+Shortest path size from vertex 3 to vertex 4 is: 4
+		3 -(1)-> 2 -(3)-> 4
+Shortest path size from vertex 3 to vertex 5 is: 3
+		3 -(1)-> 2 -(2)-> 5
+Shortest path size from vertex 4 to vertex 1 is: 8
+		4 -(3)-> 2 -(5)-> 1
+Shortest path size from vertex 4 to vertex 2 is: 3
+		4 -(3)-> 2
+Shortest path size from vertex 4 to vertex 3 is: 4
+		4 -(3)-> 2 -(1)-> 3
+Shortest path size from vertex 4 to vertex 5 is: 5
+		4 -(3)-> 2 -(2)-> 5
+Shortest path size from vertex 5 to vertex 1 is: 7
+		5 -(2)-> 2 -(5)-> 1
+Shortest path size from vertex 5 to vertex 2 is: 2
+		5 -(2)-> 2
+Shortest path size from vertex 5 to vertex 3 is: 3
+		5 -(2)-> 2 -(1)-> 3
+Shortest path size from vertex 5 to vertex 4 is: 5
+		5 -(2)-> 2 -(3)-> 4
+</pre>	
+
+<P class="p2">The outputs for graph 2</P>
+<pre class="codes">
+Adjacent Matrix of the Graph:
+
+      1    2    3    4    5    6    7    8    9 
+-------------------------------------------------- 
+1:    0    18    4    5    *    *    *    *    * 
+2:    18    0    *    13    *    *    *    *    2 
+3:    4    *    0    1    *    6    *    *    * 
+4:    5    13    1    0    10    5    *    *    * 
+5:    *    *    *    10    0    *    *    *    5 
+6:    *    *    6    5    *    0    2    *    * 
+7:    *    *    *    *    *    2    0    2    * 
+8:    *    *    *    *    *    *    2    0    6 
+9:    *    2    *    *    5    *    *    6    0 
+
+Target: Find shortest paths between all vertexs
+
+=================================================
+
+The initialized distance matrix: 
+
+      1    2    3    4    5    6    7    8    9 
+-------------------------------------------------- 
+1:    0    18    4    5    *    *    *    *    * 
+2:    18    0    *    13    *    *    *    *    2 
+3:    4    *    0    1    *    6    *    *    * 
+4:    5    13    1    0    10    5    *    *    * 
+5:    *    *    *    10    0    *    *    *    5 
+6:    *    *    6    5    *    0    2    *    * 
+7:    *    *    *    *    *    2    0    2    * 
+8:    *    *    *    *    *    *    2    0    6 
+9:    *    2    *    *    5    *    *    6    0 
+
+=================================================
+
+The procedure of Floyd-Warshall algorithms for this graph: 
+
+
+When passing vertexs 1-1
+	Replaced    [2,3]   old:2147483647   new:22
+	Replaced    [3,2]   old:2147483647   new:22
+
+      1    2    3    4    5    6    7    8    9 
+-------------------------------------------------- 
+1:    0    18    4    5    *    *    *    *    * 
+2:    18    0    22    13    *    *    *    *    2 
+3:    4    22    0    1    *    6    *    *    * 
+4:    5    13    1    0    10    5    *    *    * 
+5:    *    *    *    10    0    *    *    *    5 
+6:    *    *    6    5    *    0    2    *    * 
+7:    *    *    *    *    *    2    0    2    * 
+8:    *    *    *    *    *    *    2    0    6 
+9:    *    2    *    *    5    *    *    6    0 
+
+When passing vertexs 1-2
+	Replaced    [1,9]   old:2147483647   new:20
+	Replaced    [3,9]   old:2147483647   new:24
+	Replaced    [4,9]   old:2147483647   new:15
+	Replaced    [9,1]   old:2147483647   new:20
+	Replaced    [9,3]   old:2147483647   new:24
+	Replaced    [9,4]   old:2147483647   new:15
+
+      1    2    3    4    5    6    7    8    9 
+-------------------------------------------------- 
+1:    0    18    4    5    *    *    *    *    20 
+2:    18    0    22    13    *    *    *    *    2 
+3:    4    22    0    1    *    6    *    *    24 
+4:    5    13    1    0    10    5    *    *    15 
+5:    *    *    *    10    0    *    *    *    5 
+6:    *    *    6    5    *    0    2    *    * 
+7:    *    *    *    *    *    2    0    2    * 
+8:    *    *    *    *    *    *    2    0    6 
+9:    20    2    24    15    5    *    *    6    0 
+
+When passing vertexs 1-3
+	Replaced    [1,6]   old:2147483647   new:10
+	Replaced    [2,6]   old:2147483647   new:28
+	Replaced    [6,1]   old:2147483647   new:10
+	Replaced    [6,2]   old:2147483647   new:28
+	Replaced    [6,9]   old:2147483647   new:30
+	Replaced    [9,6]   old:2147483647   new:30
+
+      1    2    3    4    5    6    7    8    9 
+-------------------------------------------------- 
+1:    0    18    4    5    *    10    *    *    20 
+2:    18    0    22    13    *    28    *    *    2 
+3:    4    22    0    1    *    6    *    *    24 
+4:    5    13    1    0    10    5    *    *    15 
+5:    *    *    *    10    0    *    *    *    5 
+6:    10    28    6    5    *    0    2    *    30 
+7:    *    *    *    *    *    2    0    2    * 
+8:    *    *    *    *    *    *    2    0    6 
+9:    20    2    24    15    5    30    *    6    0 
+
+When passing vertexs 1-4
+	Replaced    [1,5]   old:2147483647   new:15
+	Replaced    [2,3]   old:22   new:14
+	Replaced    [2,5]   old:2147483647   new:23
+	Replaced    [2,6]   old:28   new:18
+	Replaced    [3,2]   old:22   new:14
+	Replaced    [3,5]   old:2147483647   new:11
+	Replaced    [3,9]   old:24   new:16
+	Replaced    [5,1]   old:2147483647   new:15
+	Replaced    [5,2]   old:2147483647   new:23
+	Replaced    [5,3]   old:2147483647   new:11
+	Replaced    [5,6]   old:2147483647   new:15
+	Replaced    [6,2]   old:28   new:18
+	Replaced    [6,5]   old:2147483647   new:15
+	Replaced    [6,9]   old:30   new:20
+	Replaced    [9,3]   old:24   new:16
+	Replaced    [9,6]   old:30   new:20
+
+      1    2    3    4    5    6    7    8    9 
+-------------------------------------------------- 
+1:    0    18    4    5    15    10    *    *    20 
+2:    18    0    14    13    23    18    *    *    2 
+3:    4    14    0    1    11    6    *    *    16 
+4:    5    13    1    0    10    5    *    *    15 
+5:    15    23    11    10    0    15    *    *    5 
+6:    10    18    6    5    15    0    2    *    20 
+7:    *    *    *    *    *    2    0    2    * 
+8:    *    *    *    *    *    *    2    0    6 
+9:    20    2    16    15    5    20    *    6    0 
+
+When passing vertexs 1-5
+
+      1    2    3    4    5    6    7    8    9 
+-------------------------------------------------- 
+1:    0    18    4    5    15    10    *    *    20 
+2:    18    0    14    13    23    18    *    *    2 
+3:    4    14    0    1    11    6    *    *    16 
+4:    5    13    1    0    10    5    *    *    15 
+5:    15    23    11    10    0    15    *    *    5 
+6:    10    18    6    5    15    0    2    *    20 
+7:    *    *    *    *    *    2    0    2    * 
+8:    *    *    *    *    *    *    2    0    6 
+9:    20    2    16    15    5    20    *    6    0 
+
+When passing vertexs 1-6
+	Replaced    [1,7]   old:2147483647   new:12
+	Replaced    [2,7]   old:2147483647   new:20
+	Replaced    [3,7]   old:2147483647   new:8
+	Replaced    [4,7]   old:2147483647   new:7
+	Replaced    [5,7]   old:2147483647   new:17
+	Replaced    [7,1]   old:2147483647   new:12
+	Replaced    [7,2]   old:2147483647   new:20
+	Replaced    [7,3]   old:2147483647   new:8
+	Replaced    [7,4]   old:2147483647   new:7
+	Replaced    [7,5]   old:2147483647   new:17
+	Replaced    [7,9]   old:2147483647   new:22
+	Replaced    [9,7]   old:2147483647   new:22
+
+      1    2    3    4    5    6    7    8    9 
+-------------------------------------------------- 
+1:    0    18    4    5    15    10    12    *    20 
+2:    18    0    14    13    23    18    20    *    2 
+3:    4    14    0    1    11    6    8    *    16 
+4:    5    13    1    0    10    5    7    *    15 
+5:    15    23    11    10    0    15    17    *    5 
+6:    10    18    6    5    15    0    2    *    20 
+7:    12    20    8    7    17    2    0    2    22 
+8:    *    *    *    *    *    *    2    0    6 
+9:    20    2    16    15    5    20    22    6    0 
+
+When passing vertexs 1-7
+	Replaced    [1,8]   old:2147483647   new:14
+	Replaced    [2,8]   old:2147483647   new:22
+	Replaced    [3,8]   old:2147483647   new:10
+	Replaced    [4,8]   old:2147483647   new:9
+	Replaced    [5,8]   old:2147483647   new:19
+	Replaced    [6,8]   old:2147483647   new:4
+	Replaced    [8,1]   old:2147483647   new:14
+	Replaced    [8,2]   old:2147483647   new:22
+	Replaced    [8,3]   old:2147483647   new:10
+	Replaced    [8,4]   old:2147483647   new:9
+	Replaced    [8,5]   old:2147483647   new:19
+	Replaced    [8,6]   old:2147483647   new:4
+
+      1    2    3    4    5    6    7    8    9 
+-------------------------------------------------- 
+1:    0    18    4    5    15    10    12    14    20 
+2:    18    0    14    13    23    18    20    22    2 
+3:    4    14    0    1    11    6    8    10    16 
+4:    5    13    1    0    10    5    7    9    15 
+5:    15    23    11    10    0    15    17    19    5 
+6:    10    18    6    5    15    0    2    4    20 
+7:    12    20    8    7    17    2    0    2    22 
+8:    14    22    10    9    19    4    2    0    6 
+9:    20    2    16    15    5    20    22    6    0 
+
+When passing vertexs 1-8
+	Replaced    [6,9]   old:20   new:10
+	Replaced    [7,9]   old:22   new:8
+	Replaced    [9,6]   old:20   new:10
+	Replaced    [9,7]   old:22   new:8
+
+      1    2    3    4    5    6    7    8    9 
+-------------------------------------------------- 
+1:    0    18    4    5    15    10    12    14    20 
+2:    18    0    14    13    23    18    20    22    2 
+3:    4    14    0    1    11    6    8    10    16 
+4:    5    13    1    0    10    5    7    9    15 
+5:    15    23    11    10    0    15    17    19    5 
+6:    10    18    6    5    15    0    2    4    10 
+7:    12    20    8    7    17    2    0    2    8 
+8:    14    22    10    9    19    4    2    0    6 
+9:    20    2    16    15    5    10    8    6    0 
+
+When passing vertexs 1-9
+	Replaced    [2,5]   old:23   new:7
+	Replaced    [2,6]   old:18   new:12
+	Replaced    [2,7]   old:20   new:10
+	Replaced    [2,8]   old:22   new:8
+	Replaced    [5,2]   old:23   new:7
+	Replaced    [5,7]   old:17   new:13
+	Replaced    [5,8]   old:19   new:11
+	Replaced    [6,2]   old:18   new:12
+	Replaced    [7,2]   old:20   new:10
+	Replaced    [7,5]   old:17   new:13
+	Replaced    [8,2]   old:22   new:8
+	Replaced    [8,5]   old:19   new:11
+
+      1    2    3    4    5    6    7    8    9 
+-------------------------------------------------- 
+1:    0    18    4    5    15    10    12    14    20 
+2:    18    0    14    13    7    12    10    8    2 
+3:    4    14    0    1    11    6    8    10    16 
+4:    5    13    1    0    10    5    7    9    15 
+5:    15    7    11    10    0    15    13    11    5 
+6:    10    12    6    5    15    0    2    4    10 
+7:    12    10    8    7    13    2    0    2    8 
+8:    14    8    10    9    11    4    2    0    6 
+9:    20    2    16    15    5    10    8    6    0 
+
+=================================================
+
+The final shortest paths between vertexs:
+
+      1    2    3    4    5    6    7    8    9 
+-------------------------------------------------- 
+1:    0    18    4    5    15    10    12    14    20 
+2:    18    0    14    13    7    12    10    8    2 
+3:    4    14    0    1    11    6    8    10    16 
+4:    5    13    1    0    10    5    7    9    15 
+5:    15    7    11    10    0    15    13    11    5 
+6:    10    12    6    5    15    0    2    4    10 
+7:    12    10    8    7    13    2    0    2    8 
+8:    14    8    10    9    11    4    2    0    6 
+9:    20    2    16    15    5    10    8    6    0 
+
+The final previous matrix is: 
+
+      1    2    3    4    5    6    7    8    9 
+-------------------------------------------------- 
+1:    1    1    1    1    4    3    6    7    2 
+2:    2    2    4    2    9    7    8    9    2 
+3:    3    4    3    3    4    3    6    7    2 
+4:    4    4    4    4    4    4    6    7    2 
+5:    4    9    4    5    5    4    8    9    5 
+6:    3    9    6    6    4    6    6    7    8 
+7:    3    9    6    6    9    7    7    7    8 
+8:    3    9    6    6    9    7    8    8    8 
+9:    2    9    4    2    9    7    8    9    9 
+
+=================================================
+
+The final paths are following.
+
+Shortest path size from vertex 1 to vertex 2 is: 18
+		1 -(18)-> 2
+Shortest path size from vertex 1 to vertex 3 is: 4
+		1 -(4)-> 3
+Shortest path size from vertex 1 to vertex 4 is: 5
+		1 -(5)-> 4
+Shortest path size from vertex 1 to vertex 5 is: 15
+		1 -(5)-> 4 -(10)-> 5
+Shortest path size from vertex 1 to vertex 6 is: 10
+		1 -(4)-> 3 -(6)-> 6
+Shortest path size from vertex 1 to vertex 7 is: 12
+		1 -(4)-> 3 -(6)-> 6 -(2)-> 7
+Shortest path size from vertex 1 to vertex 8 is: 14
+		1 -(4)-> 3 -(6)-> 6 -(2)-> 7 -(2)-> 8
+Shortest path size from vertex 1 to vertex 9 is: 20
+		1 -(18)-> 2 -(2)-> 9
+Shortest path size from vertex 2 to vertex 1 is: 18
+		2 -(18)-> 1
+Shortest path size from vertex 2 to vertex 3 is: 14
+		2 -(13)-> 4 -(1)-> 3
+Shortest path size from vertex 2 to vertex 4 is: 13
+		2 -(13)-> 4
+Shortest path size from vertex 2 to vertex 5 is: 7
+		2 -(2)-> 9 -(5)-> 5
+Shortest path size from vertex 2 to vertex 6 is: 12
+		2 -(2)-> 9 -(6)-> 8 -(2)-> 7 -(2)-> 6
+Shortest path size from vertex 2 to vertex 7 is: 10
+		2 -(2)-> 9 -(6)-> 8 -(2)-> 7
+Shortest path size from vertex 2 to vertex 8 is: 8
+		2 -(2)-> 9 -(6)-> 8
+Shortest path size from vertex 2 to vertex 9 is: 2
+		2 -(2)-> 9
+Shortest path size from vertex 3 to vertex 1 is: 4
+		3 -(4)-> 1
+Shortest path size from vertex 3 to vertex 2 is: 14
+		3 -(1)-> 4 -(13)-> 2
+Shortest path size from vertex 3 to vertex 4 is: 1
+		3 -(1)-> 4
+Shortest path size from vertex 3 to vertex 5 is: 11
+		3 -(1)-> 4 -(10)-> 5
+Shortest path size from vertex 3 to vertex 6 is: 6
+		3 -(6)-> 6
+Shortest path size from vertex 3 to vertex 7 is: 8
+		3 -(6)-> 6 -(2)-> 7
+Shortest path size from vertex 3 to vertex 8 is: 10
+		3 -(6)-> 6 -(2)-> 7 -(2)-> 8
+Shortest path size from vertex 3 to vertex 9 is: 16
+		3 -(1)-> 4 -(13)-> 2 -(2)-> 9
+Shortest path size from vertex 4 to vertex 1 is: 5
+		4 -(5)-> 1
+Shortest path size from vertex 4 to vertex 2 is: 13
+		4 -(13)-> 2
+Shortest path size from vertex 4 to vertex 3 is: 1
+		4 -(1)-> 3
+Shortest path size from vertex 4 to vertex 5 is: 10
+		4 -(10)-> 5
+Shortest path size from vertex 4 to vertex 6 is: 5
+		4 -(5)-> 6
+Shortest path size from vertex 4 to vertex 7 is: 7
+		4 -(5)-> 6 -(2)-> 7
+Shortest path size from vertex 4 to vertex 8 is: 9
+		4 -(5)-> 6 -(2)-> 7 -(2)-> 8
+Shortest path size from vertex 4 to vertex 9 is: 15
+		4 -(13)-> 2 -(2)-> 9
+Shortest path size from vertex 5 to vertex 1 is: 15
+		5 -(10)-> 4 -(5)-> 1
+Shortest path size from vertex 5 to vertex 2 is: 7
+		5 -(5)-> 9 -(2)-> 2
+Shortest path size from vertex 5 to vertex 3 is: 11
+		5 -(10)-> 4 -(1)-> 3
+Shortest path size from vertex 5 to vertex 4 is: 10
+		5 -(10)-> 4
+Shortest path size from vertex 5 to vertex 6 is: 15
+		5 -(10)-> 4 -(5)-> 6
+Shortest path size from vertex 5 to vertex 7 is: 13
+		5 -(5)-> 9 -(6)-> 8 -(2)-> 7
+Shortest path size from vertex 5 to vertex 8 is: 11
+		5 -(5)-> 9 -(6)-> 8
+Shortest path size from vertex 5 to vertex 9 is: 5
+		5 -(5)-> 9
+Shortest path size from vertex 6 to vertex 1 is: 10
+		6 -(6)-> 3 -(4)-> 1
+Shortest path size from vertex 6 to vertex 2 is: 12
+		6 -(2)-> 7 -(2)-> 8 -(6)-> 9 -(2)-> 2
+Shortest path size from vertex 6 to vertex 3 is: 6
+		6 -(6)-> 3
+Shortest path size from vertex 6 to vertex 4 is: 5
+		6 -(5)-> 4
+Shortest path size from vertex 6 to vertex 5 is: 15
+		6 -(5)-> 4 -(10)-> 5
+Shortest path size from vertex 6 to vertex 7 is: 2
+		6 -(2)-> 7
+Shortest path size from vertex 6 to vertex 8 is: 4
+		6 -(2)-> 7 -(2)-> 8
+Shortest path size from vertex 6 to vertex 9 is: 10
+		6 -(2)-> 7 -(2)-> 8 -(6)-> 9
+Shortest path size from vertex 7 to vertex 1 is: 12
+		7 -(2)-> 6 -(6)-> 3 -(4)-> 1
+Shortest path size from vertex 7 to vertex 2 is: 10
+		7 -(2)-> 8 -(6)-> 9 -(2)-> 2
+Shortest path size from vertex 7 to vertex 3 is: 8
+		7 -(2)-> 6 -(6)-> 3
+Shortest path size from vertex 7 to vertex 4 is: 7
+		7 -(2)-> 6 -(5)-> 4
+Shortest path size from vertex 7 to vertex 5 is: 13
+		7 -(2)-> 8 -(6)-> 9 -(5)-> 5
+Shortest path size from vertex 7 to vertex 6 is: 2
+		7 -(2)-> 6
+Shortest path size from vertex 7 to vertex 8 is: 2
+		7 -(2)-> 8
+Shortest path size from vertex 7 to vertex 9 is: 8
+		7 -(2)-> 8 -(6)-> 9
+Shortest path size from vertex 8 to vertex 1 is: 14
+		8 -(2)-> 7 -(2)-> 6 -(6)-> 3 -(4)-> 1
+Shortest path size from vertex 8 to vertex 2 is: 8
+		8 -(6)-> 9 -(2)-> 2
+Shortest path size from vertex 8 to vertex 3 is: 10
+		8 -(2)-> 7 -(2)-> 6 -(6)-> 3
+Shortest path size from vertex 8 to vertex 4 is: 9
+		8 -(2)-> 7 -(2)-> 6 -(5)-> 4
+Shortest path size from vertex 8 to vertex 5 is: 11
+		8 -(6)-> 9 -(5)-> 5
+Shortest path size from vertex 8 to vertex 6 is: 4
+		8 -(2)-> 7 -(2)-> 6
+Shortest path size from vertex 8 to vertex 7 is: 2
+		8 -(2)-> 7
+Shortest path size from vertex 8 to vertex 9 is: 6
+		8 -(6)-> 9
+Shortest path size from vertex 9 to vertex 1 is: 20
+		9 -(2)-> 2 -(18)-> 1
+Shortest path size from vertex 9 to vertex 2 is: 2
+		9 -(2)-> 2
+Shortest path size from vertex 9 to vertex 3 is: 16
+		9 -(2)-> 2 -(13)-> 4 -(1)-> 3
+Shortest path size from vertex 9 to vertex 4 is: 15
+		9 -(2)-> 2 -(13)-> 4
+Shortest path size from vertex 9 to vertex 5 is: 5
+		9 -(5)-> 5
+Shortest path size from vertex 9 to vertex 6 is: 10
+		9 -(6)-> 8 -(2)-> 7 -(2)-> 6
+Shortest path size from vertex 9 to vertex 7 is: 8
+		9 -(6)-> 8 -(2)-> 7
+Shortest path size from vertex 9 to vertex 8 is: 6
+		9 -(6)-> 8
+</pre>
+	
+</BR></BR>
+<a href="https://github.com/Mararsh/Vegetables"><img src="home.jpg" width=60px></a> 
+</body> 
+</html>

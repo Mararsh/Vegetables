@@ -1,0 +1,106 @@
+ <html> 
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        body {font-size:14px;
+		/*
+		font-family:
+			 -apple-system, BlinkMacSystemFont,
+			 "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+			 "Helvetica Neue", sans-serif;	
+		*/
+		}
+        p.p1 {text-indent: 0em; font-size:17px;font-weight:bold; color:darkgreen}
+        p.p2 {text-indent: 0em; font-size:15px;font-weight:bold}
+        p.p3 {text-indent: 0em; font-size:14px;font-weight:bold}
+		.article {width: 800px; margin:0 auto;font-size:14px;font-weight:normal;}
+        .paragraph {text-indent: 2em; font-size:13px;}
+        .link {text-indent: 6em; font-size:13px;}
+        .pix {text-indent: 6em; }
+        .refer {text-indent: 6em; font-size:13px; color:darkblue}
+        ol.inside {list-style-position: inside; text-indent: 2em;}
+        .description {font-size:14px; padding: 5px; background-color:#336633; font-weight:bord; color: white}
+        .codes {font-size:14px; padding: 5px; background-color:black; font-weight:normal; color: #CCFF99}
+		.table1 {font-size:14px; width:90%; border-collapse:collapse; border:solid 1px;}
+		tr {border:solid#000 1px;}
+		td {border:solid#000 1px; }
+		.Header { font-weight:bold; text-align:center;}
+		.Data {font-weight:normal; text-align:left; }
+		ul.inside {list-style-position: inside; text-indent: 2em;}
+    </style>
+</head> 
+<body> 
+<body class="article"> 
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a> 
+
+<h2 align="center">59. 3Sum Closest</h2>
+
+<P class="p2">Description of the Problem</P>
+<P class="link"><a href="https://www.lintcode.com/problem/3sum-closest/description" target="_blank">https://www.lintcode.com/problem/3sum-closest/description</a></P>
+<pre class="description">
+
+59. 3Sum Closest
+
+Given an array S of n integers, find three integers in S such that the sum is closest to a given number, 
+target. Return the sum of the three integers.
+Example
+
+For example, given array S = [-1 2 1 -4], and target = 1. The sum that is closest to the target is 2. 
+(-1 + 2 + 1 = 2).
+
+Challenge
+
+O(n^2) time, O(1) extra space
+
+</code>
+</pre>	
+
+<P class="p2">Idea to solve the problem</P>
+<P class="paragraph">Sorting/Two pointers</P>
+
+<P class="p2">My codes</P>
+<pre class="codes">
+<code>
+
+
+public class Solution {
+    /**
+     * @param numbers: Give an array numbers of n integer
+     * @param target: An integer
+     * @return: return the sum of the three integers, the sum closest target.
+     */
+    // Total runtime 2243 ms. Your submission beats 88.60% Submissions!
+    public int threeSumClosest(int[] numbers, int target) {
+        if ( numbers == null || numbers.length < 3 ) return -1;
+        Arrays.sort(numbers);
+        int diff = Integer.MAX_VALUE , dsum = -1;
+        for (int i=0; i< numbers.length - 1; i++) {
+            int left = i+1, right = numbers.length -1;
+            while (left < right ) {
+                int sum = numbers[i] + numbers[left] + numbers[right];
+                if ( sum == target) {
+                    return sum;
+                } 
+                int ndiff = Math.abs(sum -  target);
+                if ( ndiff < diff ) {
+                    diff = ndiff;
+                    dsum = sum;
+                }
+                if ( sum > target ) {
+                    right--;
+                } else 
+                    left++;
+            }
+        }
+        return dsum;
+    }
+}
+
+</code>
+</pre>
+
+
+
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a> 	
+</body> 
+</html>

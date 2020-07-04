@@ -1,0 +1,119 @@
+ <html> 
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        body {font-size:14px;
+		/*
+		font-family:
+			 -apple-system, BlinkMacSystemFont,
+			 "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+			 "Helvetica Neue", sans-serif;	
+		*/
+		}
+        p.p1 {text-indent: 0em; font-size:17px;font-weight:bold; color:darkgreen}
+        p.p2 {text-indent: 0em; font-size:15px;font-weight:bold}
+        p.p3 {text-indent: 0em; font-size:14px;font-weight:bold}
+		.article {width: 800px; margin:0 auto;font-size:14px;font-weight:normal;}
+        .paragraph {text-indent: 2em; font-size:13px;}
+        .link {text-indent: 6em; font-size:13px;}
+        .pix {text-indent: 6em; }
+        .refer {text-indent: 6em; font-size:13px; color:darkblue}
+        ol.inside {list-style-position: inside; text-indent: 2em;}
+        .description {font-size:14px; padding: 5px; background-color:#336633; font-weight:bord; color: white}
+        .codes {font-size:14px; padding: 5px; background-color:black; font-weight:normal; color: #CCFF99}
+		.table1 {font-size:14px; width:90%; border-collapse:collapse; border:solid 1px;}
+		tr {border:solid#000 1px;}
+		td {border:solid#000 1px; }
+		.Header { font-weight:bold; text-align:center;}
+		.Data {font-weight:normal; text-align:left; }
+		ul.inside {list-style-position: inside; text-indent: 2em;}
+    </style>
+</head> 
+<body> 
+<body class="article"> 
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a> 
+
+<h2 align="center">7. Reverse Integer</h2>
+
+<P class="p2">Description of the Problem</P>
+<P class="link"><a href="" target="_blank"></a></P>
+<pre class="description">
+Given a 32-bit signed integer, reverse digits of an integer.
+
+Example 1:
+
+Input: 123
+Output: 321
+
+Example 2:
+
+Input: -123
+Output: -321
+
+Example 3:
+
+Input: 120
+Output: 21
+
+Note:
+Assume we are dealing with an environment which could only store integers 
+within the 32-bit signed integer range: [−231,  231 − 1]. For the purpose of this problem, 
+assume that your function returns 0 when the reversed integer overflows.
+
+
+</code>
+</pre>	
+
+<P class="p2">Idea to solve the problem</P>
+<P class="paragraph">String</P>
+
+<P class="p2">My codes</P>
+<pre class="codes">
+<code>
+class Solution {
+    
+    public int reverse(int x) {
+        StringBuffer sb = new StringBuffer();
+        sb.append(Math.abs(x) + "");
+        String s = sb.reverse().toString();
+        if (x &lt; 0 ) s ="-" + s;
+        int ret;
+        try {
+            ret =  Integer.parseInt(s);            
+        } catch (Exception e) {
+            ret = 0;
+        }
+        return ret;      
+        
+    }
+    
+     public int reverse2(int x) {
+        char[] d = ("" + Math.abs(x)).toCharArray();
+        int left = 0, right = d.length-1;
+        while (left &lt; right) {
+            char c = d[left];
+            d[left] = d[right];
+            d[right] = c;
+            left++;
+            right--;
+        }
+        String s = String.valueOf(d);
+        if (x &lt; 0) s = "-" + s;
+        int ret;
+        try {
+            ret =  Integer.parseInt(s);            
+        } catch (Exception e) {
+            ret = 0;
+        }
+        return ret;      
+        
+    }
+}
+</code>
+</pre>
+
+
+
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a> 	
+</body> 
+</html>

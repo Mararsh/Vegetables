@@ -1,0 +1,392 @@
+ <html> 
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        body {font-size:14px;
+		/*
+		font-family:
+			 -apple-system, BlinkMacSystemFont,
+			 "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+			 "Helvetica Neue", sans-serif;	
+		*/
+		}
+        p.p1 {text-indent: 0em; font-size:17px;font-weight:bold; color:darkgreen}
+        p.p2 {text-indent: 0em; font-size:15px;font-weight:bold}
+        p.p3 {text-indent: 0em; font-size:14px;font-weight:bold}
+		.article {width: 800px; margin:0 auto;font-size:14px;font-weight:normal;}
+        .paragraph {text-indent: 2em; font-size:13px;}
+        .link {text-indent: 6em; font-size:13px;}
+        .pix {text-indent: 6em; }
+        .refer {text-indent: 6em; font-size:13px; color:darkblue}
+        ol.inside {list-style-position: inside; text-indent: 2em;}
+        .description {font-size:14px; padding: 5px; background-color:#336633; font-weight:bord; color: white}
+        .codes {font-size:14px; padding: 5px; background-color:black; font-weight:normal; color: #CCFF99}
+		.table1 {font-size:14px; width:90%; border-collapse:collapse; border:solid 1px;}
+		tr {border:solid#000 1px;}
+		td {border:solid#000 1px; }
+		.Header { font-weight:bold; text-align:center;}
+		.Data {font-weight:normal; text-align:left; }
+		ul.inside {list-style-position: inside; text-indent: 2em;}
+    </style>
+</head> 
+<body class="article"> 
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a>	
+<h2 align="center">Selection Sorting in Python3</h2>
+
+<P class="p1">The Python3 codes about Selection Sorting</P>	
+<a href="selection_sort.py">selection_sort.py</a>
+	
+<pre class="codes">
+<code>
+
+
+# -*- coding: utf-8 -*-
+"""
+Title     : Selection Sorting
+Objective : Show each step of comparing and movement in intuitive way
+Created by: Mara
+Created on: 2018/3/19 21:01
+"""
+
+
+import random
+
+ODATA = []
+DATA_LENGTH = 10
+
+def generate_data(number):
+    while len(ODATA) < number:
+        data = random.randint(0, number-1)
+        if data not in ODATA:
+            ODATA.append(data)
+    print("\nDATA:   " + str(ODATA))
+
+
+def selection_sort_find_max():
+    DATA = ODATA.copy()
+    compare_count = 0
+    move_count = 0;
+    print("\n** selection_sort_find_max")
+    print("** This algorithm always finds the largest data and move it to end.")
+    print("DATA:   " + str(DATA))
+    for i in range(0, DATA_LENGTH):
+        current_index = DATA_LENGTH - 1 - i
+        print("i=" + str(current_index))
+        max_index = current_index
+        for j in range(0, DATA_LENGTH - 1 - i):
+            compare_count = compare_count + 1
+            print("  j=" + str(j) + "  comparing:'" + str( DATA[j]) + "' and '"+ str( DATA[max_index]) + "'")
+            if DATA[j] > DATA[max_index]:
+                max_index = j
+                print("     max=" + str(DATA[max_index]) )
+        if max_index == current_index:
+            continue
+        tmp1 = DATA[max_index]
+        tmp2 = DATA[current_index]
+        DATA[max_index] = tmp2
+        DATA[current_index] = tmp1
+        move_count = move_count + 1
+        print("     exchanging:'" + str( DATA[max_index]) + "' and '"+ str( DATA[current_index])  + "'")
+        print("     DATA: [", end="")
+        for m in range(0, DATA_LENGTH):
+            if m==current_index:
+                print('\033[1;33;40m', end="")
+                print(str(DATA[m]), end="")
+                if m!=(DATA_LENGTH-1):
+                    print(", ", end="")
+                print("\033[0m", end="")
+            elif m == max_index:
+                print('\033[1;33;m', end="")
+                print(str(DATA[m]), end="")
+                if m != (DATA_LENGTH - 1):
+                    print(", ", end="")
+                print("\033[0m", end="")
+            elif m >= DATA_LENGTH - 1 - i:
+                print('\033[1;32;40m', end="")
+                print(str(DATA[m]), end="")
+                if m != (DATA_LENGTH - 1):
+                    print(", ", end="")
+                print("\033[0m", end="")
+            else:
+                print(str(DATA[m]), end="")
+                if m!=(DATA_LENGTH-1):
+                    print(", ", end="")
+        print("]")
+    return compare_count, move_count
+
+
+def selection_sort_find_min():
+    DATA = ODATA.copy()
+    compare_count = 0
+    move_count = 0;
+    print("\n** selection_sort_find_min")
+    print("** This algorithm always finds the smallest data and move it to front.")
+    print("DATA:   " + str(DATA))
+    for i in range(0, DATA_LENGTH):
+        current_index = i
+        print("i=" + str(current_index))
+        min_index = current_index
+        for j in range(i+1, DATA_LENGTH):
+            compare_count = compare_count + 1
+            print("  j=" + str(j) + "  comparing:'" + str(DATA[j]) + "' and '" + str(DATA[min_index]) + "'")
+            if DATA[j] < DATA[min_index]:
+                min_index = j
+                print("     min=" + str(DATA[min_index]))
+        if min_index == current_index:
+            continue
+        tmp1 = DATA[min_index]
+        tmp2 = DATA[current_index]
+        DATA[min_index] = tmp2
+        DATA[current_index] = tmp1
+        move_count = move_count + 1
+        print("     exchanging:'" + str(DATA[min_index]) + "' and '" + str(DATA[current_index]) + "'")
+        print("     DATA: [", end="")
+        for m in range(0, DATA_LENGTH):
+            if m==current_index:
+                print('\033[1;33;40m', end="")
+                print(str(DATA[m]), end="")
+                if m!=(DATA_LENGTH-1):
+                    print(", ", end="")
+                print("\033[0m", end="")
+            elif m == min_index:
+                print('\033[1;33;m', end="")
+                print(str(DATA[m]), end="")
+                if m != (DATA_LENGTH - 1):
+                    print(", ", end="")
+                print("\033[0m", end="")
+            elif m <= i:
+                print('\033[1;32;40m', end="")
+                print(str(DATA[m]), end="")
+                if m != (DATA_LENGTH - 1):
+                    print(", ", end="")
+                print("\033[0m", end="")
+            else:
+                print(str(DATA[m]), end="")
+                if m != (DATA_LENGTH - 1):
+                    print(", ", end="")
+        print("]")
+    return compare_count, move_count
+
+
+if __name__ == '__main__':
+    generate_data(DATA_LENGTH)
+
+    compare_count, move_count = selection_sort_find_max()
+    print("## Data size: " + str(DATA_LENGTH))
+    print("## Total compared: " + str(compare_count))
+    print("## Total moved: " + str(move_count))
+
+    compare_count, move_count = selection_sort_find_min()
+    print("## Data size: " + str(DATA_LENGTH))
+    print("## Total compared: " + str(compare_count))
+    print("## Total moved: " + str(move_count))
+
+
+</code>
+</pre>	
+
+<P class="p1">The outputs that shows the principle of "Selection Sorting"</P>		
+		<a href="selection_sort1.png" target="_blank">Selection Sorting which always finds the largest data and move it to end, size:6 </a></br>
+		<a href="selection_sort2.png" target="_blank">Selection Sorting which always finds the smallest data and move it to front, size:6</a></br>
+		<a href="selection_sort3.png" target="_blank">Selection Sorting which always finds the largest data and move it to end, size:20</a></br>
+		<a href="selection_sort4.png" target="_blank">Selection Sorting which always finds the smallest data and move it to front, size:20</a></br>
+
+
+
+<P class="p1">The outputs for data size 10 </P>	
+	<div class="paragraph">
+		<p>(Colors in Python console are not caught in this way)</p>
+	</div>
+
+<pre class="codes">
+<code>
+
+DATA:   [0, 9, 7, 2, 3, 8, 5, 6, 1, 4]
+
+** selection_sort_find_max
+** This algorithm always finds the largest data and move it to end.
+DATA:   [0, 9, 7, 2, 3, 8, 5, 6, 1, 4]
+i=9
+  j=0  comparing:'0' and '4'
+  j=1  comparing:'9' and '4'
+     max=9
+  j=2  comparing:'7' and '9'
+  j=3  comparing:'2' and '9'
+  j=4  comparing:'3' and '9'
+  j=5  comparing:'8' and '9'
+  j=6  comparing:'5' and '9'
+  j=7  comparing:'6' and '9'
+  j=8  comparing:'1' and '9'
+     exchanging:'4' and '9'
+     DATA: [0, 4, 7, 2, 3, 8, 5, 6, 1, 9]
+i=8
+  j=0  comparing:'0' and '1'
+  j=1  comparing:'4' and '1'
+     max=4
+  j=2  comparing:'7' and '4'
+     max=7
+  j=3  comparing:'2' and '7'
+  j=4  comparing:'3' and '7'
+  j=5  comparing:'8' and '7'
+     max=8
+  j=6  comparing:'5' and '8'
+  j=7  comparing:'6' and '8'
+     exchanging:'1' and '8'
+     DATA: [0, 4, 7, 2, 3, 1, 5, 6, 8, 9]
+i=7
+  j=0  comparing:'0' and '6'
+  j=1  comparing:'4' and '6'
+  j=2  comparing:'7' and '6'
+     max=7
+  j=3  comparing:'2' and '7'
+  j=4  comparing:'3' and '7'
+  j=5  comparing:'1' and '7'
+  j=6  comparing:'5' and '7'
+     exchanging:'6' and '7'
+     DATA: [0, 4, 6, 2, 3, 1, 5, 7, 8, 9]
+i=6
+  j=0  comparing:'0' and '5'
+  j=1  comparing:'4' and '5'
+  j=2  comparing:'6' and '5'
+     max=6
+  j=3  comparing:'2' and '6'
+  j=4  comparing:'3' and '6'
+  j=5  comparing:'1' and '6'
+     exchanging:'5' and '6'
+     DATA: [0, 4, 5, 2, 3, 1, 6, 7, 8, 9]
+i=5
+  j=0  comparing:'0' and '1'
+  j=1  comparing:'4' and '1'
+     max=4
+  j=2  comparing:'5' and '4'
+     max=5
+  j=3  comparing:'2' and '5'
+  j=4  comparing:'3' and '5'
+     exchanging:'1' and '5'
+     DATA: [0, 4, 1, 2, 3, 5, 6, 7, 8, 9]
+i=4
+  j=0  comparing:'0' and '3'
+  j=1  comparing:'4' and '3'
+     max=4
+  j=2  comparing:'1' and '4'
+  j=3  comparing:'2' and '4'
+     exchanging:'3' and '4'
+     DATA: [0, 3, 1, 2, 4, 5, 6, 7, 8, 9]
+i=3
+  j=0  comparing:'0' and '2'
+  j=1  comparing:'3' and '2'
+     max=3
+  j=2  comparing:'1' and '3'
+     exchanging:'2' and '3'
+     DATA: [0, 2, 1, 3, 4, 5, 6, 7, 8, 9]
+i=2
+  j=0  comparing:'0' and '1'
+  j=1  comparing:'2' and '1'
+     max=2
+     exchanging:'1' and '2'
+     DATA: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+i=1
+  j=0  comparing:'0' and '1'
+i=0
+## Data size: 10
+## Total compared: 45
+## Total moved: 8
+
+** selection_sort_find_min
+** This algorithm always finds the smallest data and move it to front.
+DATA:   [0, 9, 7, 2, 3, 8, 5, 6, 1, 4]
+i=0
+  j=1  comparing:'9' and '0'
+  j=2  comparing:'7' and '0'
+  j=3  comparing:'2' and '0'
+  j=4  comparing:'3' and '0'
+  j=5  comparing:'8' and '0'
+  j=6  comparing:'5' and '0'
+  j=7  comparing:'6' and '0'
+  j=8  comparing:'1' and '0'
+  j=9  comparing:'4' and '0'
+i=1
+  j=2  comparing:'7' and '9'
+     min=7
+  j=3  comparing:'2' and '7'
+     min=2
+  j=4  comparing:'3' and '2'
+  j=5  comparing:'8' and '2'
+  j=6  comparing:'5' and '2'
+  j=7  comparing:'6' and '2'
+  j=8  comparing:'1' and '2'
+     min=1
+  j=9  comparing:'4' and '1'
+     exchanging:'9' and '1'
+     DATA: [0, 1, 7, 2, 3, 8, 5, 6, 9, 4]
+i=2
+  j=3  comparing:'2' and '7'
+     min=2
+  j=4  comparing:'3' and '2'
+  j=5  comparing:'8' and '2'
+  j=6  comparing:'5' and '2'
+  j=7  comparing:'6' and '2'
+  j=8  comparing:'9' and '2'
+  j=9  comparing:'4' and '2'
+     exchanging:'7' and '2'
+     DATA: [0, 1, 2, 7, 3, 8, 5, 6, 9, 4]
+i=3
+  j=4  comparing:'3' and '7'
+     min=3
+  j=5  comparing:'8' and '3'
+  j=6  comparing:'5' and '3'
+  j=7  comparing:'6' and '3'
+  j=8  comparing:'9' and '3'
+  j=9  comparing:'4' and '3'
+     exchanging:'7' and '3'
+     DATA: [0, 1, 2, 3, 7, 8, 5, 6, 9, 4]
+i=4
+  j=5  comparing:'8' and '7'
+  j=6  comparing:'5' and '7'
+     min=5
+  j=7  comparing:'6' and '5'
+  j=8  comparing:'9' and '5'
+  j=9  comparing:'4' and '5'
+     min=4
+     exchanging:'7' and '4'
+     DATA: [0, 1, 2, 3, 4, 8, 5, 6, 9, 7]
+i=5
+  j=6  comparing:'5' and '8'
+     min=5
+  j=7  comparing:'6' and '5'
+  j=8  comparing:'9' and '5'
+  j=9  comparing:'7' and '5'
+     exchanging:'8' and '5'
+     DATA: [0, 1, 2, 3, 4, 5, 8, 6, 9, 7]
+i=6
+  j=7  comparing:'6' and '8'
+     min=6
+  j=8  comparing:'9' and '6'
+  j=9  comparing:'7' and '6'
+     exchanging:'8' and '6'
+     DATA: [0, 1, 2, 3, 4, 5, 6, 8, 9, 7]
+i=7
+  j=8  comparing:'9' and '8'
+  j=9  comparing:'7' and '8'
+     min=7
+     exchanging:'8' and '7'
+     DATA: [0, 1, 2, 3, 4, 5, 6, 7, 9, 8]
+i=8
+  j=9  comparing:'8' and '9'
+     min=8
+     exchanging:'9' and '8'
+     DATA: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+i=9
+## Data size: 10
+## Total compared: 45
+## Total moved: 8
+
+Process finished with exit code 0
+
+
+</code>
+</pre>
+
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a>	
+</body> 
+</html>

@@ -1,0 +1,141 @@
+ <html> 
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        body {font-size:14px;
+		/*
+		font-family:
+			 -apple-system, BlinkMacSystemFont,
+			 "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+			 "Helvetica Neue", sans-serif;	
+		*/
+		}
+        p.p1 {text-indent: 0em; font-size:17px;font-weight:bold; color:darkgreen}
+        p.p2 {text-indent: 0em; font-size:15px;font-weight:bold}
+        p.p3 {text-indent: 0em; font-size:14px;font-weight:bold}
+		.article {width: 800px; margin:0 auto;font-size:14px;font-weight:normal;}
+        .paragraph {text-indent: 2em; font-size:13px;}
+        .link {text-indent: 6em; font-size:13px;}
+        .pix {text-indent: 6em; }
+        .refer {text-indent: 6em; font-size:13px; color:darkblue}
+        ol.inside {list-style-position: inside; text-indent: 2em;}
+        .description {font-size:14px; padding: 5px; background-color:#336633; font-weight:bord; color: white}
+        .codes {font-size:14px; padding: 5px; background-color:black; font-weight:normal; color: #CCFF99}
+		.table1 {font-size:14px; width:90%; border-collapse:collapse; border:solid 1px;}
+		tr {border:solid#000 1px;}
+		td {border:solid#000 1px; }
+		.Header { font-weight:bold; text-align:center;}
+		.Data {font-weight:normal; text-align:left; }
+		ul.inside {list-style-position: inside; text-indent: 2em;}
+    </style>
+</head> 
+<body> 
+<body class="article"> 
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a> 
+
+<h2 align="center">5. Longest Palindromic Substring</h2>
+
+<P class="p2">Description of the Problem</P>
+<P class="link"><a href="" target="_blank"></a></P>
+<pre class="description">
+Given a string s, find the longest palindromic substring in s. 
+You may assume that the maximum length of s is 1000.
+
+Example 1:
+
+Input: "babad"
+Output: "bab"
+Note: "aba" is also a valid answer.
+
+Example 2:
+
+Input: "cbbd"
+Output: "bb"
+
+</code>
+</pre>	
+
+<P class="p2">Idea to solve the problem</P>
+<P class="paragraph">Two pointers</P>
+
+<P class="p2">My codes</P>
+<pre class="codes">
+<code>
+class Solution {
+    int  maxi = 0, maxj=0;
+    int len;
+    char[] d;
+    
+	 // 94 / 94 test cases passed.18 ms. Your runtime beats 87.71 % of java submissions.
+    public String longestPalindrome(String s) {
+        if ( s == null ) return null;
+        d = s.toCharArray();
+        len = s.length();
+        if (len &lt; 2 ) return s;
+        for (int i=0; i &lt; len - 1 ; i++ ) {
+            checkCenter(i, i);
+            if ( d[i] == d[i+1] ) {
+                checkCenter(i, i + 1);
+            }
+        }
+        return s.substring(maxi, maxj + 1);
+        
+    }
+    
+    private void checkCenter(int i, int j) {
+        int left=i-1, right=j+1;
+        while ( left &gt;= 0  && right &lt; len ) {
+            if ( d[left] != d[right] ) {
+                break;
+            }
+            left--;
+            right++;
+        }  
+        left++;
+        right--;
+        if ( right - left &gt; maxj - maxi )  {
+                    maxi = left;
+                    maxj = right;
+        }
+    }
+    
+    
+    public String longestPalindrome2(String s) {
+        if ( s == null ) return null;
+        d = s.toCharArray();
+        len = s.length();
+        for (int i=0; i &lt; len - 1 ; i++ ) {
+            checkSub(i);
+        }
+        return s.substring(maxi, maxj + 1);
+        
+    }
+    
+    private void checkSub(int i) {
+        for (int j = len - 1; j &gt; i; j--) {
+            if ( isPalindrome(i, j) ) {
+                if ( j - i &gt; maxj - maxi ) {
+                    maxi = i;
+                    maxj = j;
+                }
+                break;
+            }
+        }               
+    }
+    
+    private boolean isPalindrome(int left, int right) {
+       int i=left, j = right;
+        while (i  &lt; j ) {
+            if ( d[i++] != d[j--] ) return false;
+        } 
+        return true;
+    } 
+}
+</code>
+</pre>
+
+
+
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a> 	
+</body> 
+</html>

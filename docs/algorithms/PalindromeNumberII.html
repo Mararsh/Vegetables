@@ -1,0 +1,109 @@
+ <html> 
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        body {font-size:14px;
+		/*
+		font-family:
+			 -apple-system, BlinkMacSystemFont,
+			 "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+			 "Helvetica Neue", sans-serif;	
+		*/
+		}
+        p.p1 {text-indent: 0em; font-size:17px;font-weight:bold; color:darkgreen}
+        p.p2 {text-indent: 0em; font-size:15px;font-weight:bold}
+        p.p3 {text-indent: 0em; font-size:14px;font-weight:bold}
+		.article {width: 800px; margin:0 auto;font-size:14px;font-weight:normal;}
+        .paragraph {text-indent: 2em; font-size:13px;}
+        .link {text-indent: 6em; font-size:13px;}
+        .pix {text-indent: 6em; }
+        .refer {text-indent: 6em; font-size:13px; color:darkblue}
+        ol.inside {list-style-position: inside; text-indent: 2em;}
+        .description {font-size:14px; padding: 5px; background-color:#336633; font-weight:bord; color: white}
+        .codes {font-size:14px; padding: 5px; background-color:black; font-weight:normal; color: #CCFF99}
+		.table1 {font-size:14px; width:90%; border-collapse:collapse; border:solid 1px;}
+		tr {border:solid#000 1px;}
+		td {border:solid#000 1px; }
+		.Header { font-weight:bold; text-align:center;}
+		.Data {font-weight:normal; text-align:left; }
+		ul.inside {list-style-position: inside; text-indent: 2em;}
+    </style>
+</head> 
+<body> 
+<body class="article"> 
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a> 
+
+<h2 align="center">Palindrome Number II</h2>
+
+<P class="p2">Description of the Problem</P>
+<P class="link"><a href="https://www.lintcode.com/problem/palindrome-number-ii/description" target="_blank">https://www.lintcode.com/problem/palindrome-number-ii/description</a></P>
+<pre class="description">
+
+Description
+
+Determines whether a binary representation of a non-negative integer n is a palindrome
+
+    0 <= n <= 2^32 - 1
+
+Have you met this question in a real interview?  
+Example
+
+Given n = 0, return True
+
+Explanation:
+The binary representation of 0 is: 0
+
+Given n = 3, return True
+
+Explanation:
+The binary representation of 3 is: 11
+
+Given n = 4, return False
+
+Explanation:
+The binary representation of 4 is: 100
+
+Given n = 6, return False
+
+Explanation:
+The binary representation of 6 is: 110
+
+</code>
+</pre>	
+
+<P class="p2">Idea to solve the problem</P>
+<P class="paragraph">Bit operations</P>
+
+<P class="p2">My codes</P>
+<pre class="codes">
+<code>
+
+
+public class Solution {
+    /**
+     * @param n: non-negative integer n.
+     * @return: return whether a binary representation of a non-negative integer n is a palindrome.
+     */
+    // Total runtime 1515 ms. Your submission beats 98.68% Submissions!
+    public boolean isPalindrome(int n) {
+        if ( n == 0 ) return true;
+        if ( (n & 1) == 0 ) return false;
+        int k = n, kk = 0;
+        while ( k > 0 ) {
+            kk += (k & 1);
+            k = k >> 1;
+            if ( k > 0 )
+                kk = kk << 1;
+        }
+        return n == kk;
+    }
+}
+
+</code>
+</pre>
+
+
+
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a> 	
+</body> 
+</html>

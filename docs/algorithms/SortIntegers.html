@@ -1,0 +1,138 @@
+ <html> 
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        body {font-size:14px;
+		/*
+		font-family:
+			 -apple-system, BlinkMacSystemFont,
+			 "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+			 "Helvetica Neue", sans-serif;	
+		*/
+		}
+        p.p1 {text-indent: 0em; font-size:17px;font-weight:bold; color:darkgreen}
+        p.p2 {text-indent: 0em; font-size:15px;font-weight:bold}
+        p.p3 {text-indent: 0em; font-size:14px;font-weight:bold}
+		.article {width: 800px; margin:0 auto;font-size:14px;font-weight:normal;}
+        .paragraph {text-indent: 2em; font-size:13px;}
+        .link {text-indent: 6em; font-size:13px;}
+        .pix {text-indent: 6em; }
+        .refer {text-indent: 6em; font-size:13px; color:darkblue}
+        ol.inside {list-style-position: inside; text-indent: 2em;}
+        .description {font-size:14px; padding: 5px; background-color:#336633; font-weight:bord; color: white}
+        .codes {font-size:14px; padding: 5px; background-color:black; font-weight:normal; color: #CCFF99}
+		.table1 {font-size:14px; width:90%; border-collapse:collapse; border:solid 1px;}
+		tr {border:solid#000 1px;}
+		td {border:solid#000 1px; }
+		.Header { font-weight:bold; text-align:center;}
+		.Data {font-weight:normal; text-align:left; }
+		ul.inside {list-style-position: inside; text-indent: 2em;}
+    </style>
+</head> 
+<body> 
+<body class="article"> 
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a> 
+
+<h2 align="center">Sort Integers</h2>
+
+<P class="p2">Description of the Problem</P>
+<P class="link"><a href="https://www.lintcode.com/problem/sort-integers/description" target="_blank">https://www.lintcode.com/problem/sort-integers/description</a></P>
+<pre class="description">
+
+463. Sort Integers
+
+Given an integer array, sort it in ascending order. Use selection sort, bubble sort, 
+insertion sort or any O(n2) algorithm.
+Example
+
+Given [3, 2, 1, 4, 5], return [1, 2, 3, 4, 5].
+
+</code>
+</pre>	
+
+<P class="p2">Idea to solve the problem</P>
+<P class="paragraph">Just as the steps in textbooks.</P>
+
+<P class="p2">My codes</P>
+<pre class="codes">
+<code>
+
+
+public class Solution {
+    /**
+     * @param A: an integer array
+     * @return: nothing
+     */
+    public void sortIntegers(int[] A) {
+        //insertSort(A);
+        // selection_sort(A);
+        //bubble_sort(A);
+        bubble_sort2(A);
+    }
+    
+    // Total runtime 2231 ms。Your submission beats 54.80% Submissions!
+    public void insertSort(int[] A) {
+        if ( A == null || A.length < 2 ) return;
+        for (int i=1; i < A.length; i++) {
+            int key = A[i], j = i-1;
+            while (j >= 0 && A[j] > key ) {
+                    A[j+1] = A[j--];
+            }
+            A[j+1] = key;
+        }
+    }
+    
+    // Total runtime 2397 ms. Your submission beats 52.60% Submissions!
+    public void selection_sort(int[] A) {
+        if ( A == null || A.length < 2) return;
+        for (int i=0; i< A.length; i++) {
+            for (int j=i+1; j <  A.length; j++) {
+                if ( A[j] < A[i] ) {
+                    int tmp = A[j];
+                    A[j] = A[i];
+                    A[i] = tmp;
+                }
+            }
+        }
+        
+    }
+    
+    // Total runtime 2206 ms.。Your submission beats 57.80% Submissions!
+    public void bubble_sort(int[] A) {
+        if (A==null || A.length < 2) return;
+        for (int i=A.length-1; i >= 0; i--) {
+            for (int j=1; j<= i; j++) {
+                if (A[j] < A[j-1]) {
+                    int tmp = A[j-1];
+                    A[j-1] = A[j];
+                    A[j] = tmp;
+                }
+            }
+        }
+        
+    }
+    
+    // Total runtime 2411 ms. Your submission beats 40.80% Submissions!
+    public void bubble_sort2(int[] A) {
+        if (A== null || A.length < 2) return;
+        for (int i=0; i < A.length; i++) {
+            for (int j= A.length-1; j > i; j--) {
+                if ( A[j] < A[j-1]) {
+                    int tmp = A[j];
+                    A[j] = A[j-1];
+                    A[j-1] = tmp;
+                }
+            }
+        }
+    }
+    
+}
+
+</code>
+</pre>
+
+
+
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a> 	
+</body> 
+</html>

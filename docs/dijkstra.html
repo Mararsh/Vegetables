@@ -1,0 +1,478 @@
+<html> 
+<head> 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        body {font-size:14px;
+		/*
+		font-family:
+			 -apple-system, BlinkMacSystemFont,
+			 "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+			 "Helvetica Neue", sans-serif;	
+		*/
+		}
+        p.p1 {text-indent: 0em; font-size:17px;font-weight:bold; color:darkgreen}
+        p.p2 {text-indent: 0em; font-size:15px;font-weight:bold}
+        p.p3 {text-indent: 0em; font-size:14px;font-weight:bold}
+		.article {width: 800px; margin:0 auto;font-size:14px;font-weight:normal;}
+        .paragraph {text-indent: 2em; font-size:13px;}
+        .link {text-indent: 6em; font-size:13px;}
+        .pix {text-indent: 6em; }
+        .refer {text-indent: 6em; font-size:13px; color:darkblue}
+        ol.inside {list-style-position: inside; text-indent: 2em;}
+        .description {font-size:14px; padding: 5px; background-color:#336633; font-weight:bord; color: white}
+        .codes {font-size:14px; padding: 5px; background-color:black; font-weight:normal; color: #CCFF99}
+		.table1 {font-size:14px; width:90%; border-collapse:collapse; border:solid 1px;}
+		tr {border:solid#000 1px;}
+		td {border:solid#000 1px; }
+		.Header { font-weight:bold; text-align:center;}
+		.Data {font-weight:normal; text-align:left; }
+		ul.inside {list-style-position: inside; text-indent: 2em;}
+    </style>
+</head> 
+<body class="article"> 
+<a href="https://github.com/Mararsh/Vegetables"><img src="home.jpg" width=60px></a> 
+
+
+<h2 align="center">Find all shortest paths in Dijkstra Algorithm</h2>
+
+<P class="p2">Target</P>
+<pre class="description">
+Given an undirected weighted graph, find all shortest paths from a vertex to other vertexs. 
+</pre>
+
+<P class="p2">Idea to solve the problem</P>
+<P class="paragraph">Track the paths in Dijkstra Algorithm</P>
+
+<P class="p2">My codes(Java)</P>
+<pre class="codes">
+<code>
+/*
+ * Author: Mara
+ * Date: 2018-5-15
+ * Target: Given an undirected weighted graph, find all shortest paths from a vertex to other vertexs.
+ */
+package algorithms;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
+public class Dijkstra {
+
+    static int vertexCount, edgeCount;
+    static int[][] weights;
+    static boolean[] determined;
+    static int[] distance;
+    static HashMap&lt;Integer, List&lt;Integer&gt;&gt; previousList;
+    static int start;
+
+    public static void Dijkstra() {
+
+        initDijkstraData();
+
+        System.out.println("The procedure of Dijkstra algorithms for this graph: \n");
+        while (true) {
+            int currentVertex = findShortestVertex();
+            if (currentVertex &lt; 0) {
+                break;
+            }
+            determined[currentVertex] = true;
+            System.out.println("Vertex " + currentVertex
+                    + " is determined, and its shortest distance is " + distance[currentVertex]);
+            relaxDistance(currentVertex);
+        }
+    }
+
+    public static void initDijkstraData() {
+        distance = new int[vertexCount + 1];
+        determined = new boolean[vertexCount + 1];
+        distance[start] = 0;
+        determined[start] = true;
+        previousList = new HashMap&lt;&gt;();
+
+        for (int i = 1; i &lt;= vertexCount; i++) {
+            if (i == start) {
+                continue;
+            }
+            distance[i] = weights[start][i];
+            if (weights[start][i] &lt; Integer.MAX_VALUE) {
+                List&lt;Integer&gt; prevs = new ArrayList();
+                prevs.add(start);
+                previousList.put(i, prevs);
+            }
+        }
+        System.out.println("The initialized previous list: " + previousList);
+        System.out.println("The initialized distance list: " + Arrays.toString(distance));
+        System.out.println("The initialized checked list: " + Arrays.toString(determined));
+        System.out.println("\n=================================================\n");
+    }
+
+    public static int findShortestVertex() {
+        int vertex = -1;
+        int min = Integer.MAX_VALUE;
+        for (int j = 1; j &lt;= vertexCount; j++) {
+            if (determined[j] || distance[j] &gt;= min) {
+                continue;
+            }
+            min = distance[j];
+            vertex = j;
+        }
+        return vertex;
+    }
+
+    public static void relaxDistance(int vertex) {
+        for (int j = 1; j &lt;= vertexCount; j++) {
+//            System.out.println("\t\t" + j);
+            int w = weights[vertex][j];
+            if (determined[j] || w == Integer.MAX_VALUE) {
+                continue;
+            }
+            if (distance[vertex] + w &lt; distance[j]) {
+                distance[j] = distance[vertex] + w;
+                List&lt;Integer&gt; prevs = new ArrayList();
+                prevs.add(vertex);
+                previousList.put(j, prevs);
+                System.out.println("\t\tRelaxing vertex:" + j
+                        + ", and update its distance as:" + distance[j]);
+                System.out.println("\t\t\tPrevious list updated as:" + previousList);
+            } else if (distance[vertex] + w == distance[j]) {
+                List&lt;Integer&gt; prevs = previousList.get(j);
+                if (prevs == null) {
+                    prevs = new ArrayList();
+                }
+                prevs.add(vertex);
+                previousList.put(j, prevs);
+                System.out.println("\t\tEqual distance found for vertex " + j);
+                System.out.println("\t\t\tPrevious list updated as:" + previousList);
+            }
+        }
+    }
+
+    public static List&lt;List&lt;Integer&gt;&gt; buildPaths(int vertex) {
+        List&lt;List&lt;Integer&gt;&gt; paths = new ArrayList();
+        List&lt;Integer&gt; prevs = previousList.get(vertex);
+        if (prevs == null) {
+            List&lt;Integer&gt; path = new ArrayList&lt;&gt;();
+            path.add(vertex);
+            paths.add(path);
+            return paths;
+        }
+        for (int i = 0; i &lt; prevs.size(); i++) {
+            List&lt;List&lt;Integer&gt;&gt; subpaths = buildPaths(prevs.get(i));
+            for (int j = 0; j &lt; subpaths.size(); j++) {
+                List&lt;Integer&gt; subpath = subpaths.get(j);
+                subpath.add(vertex);
+                paths.add(subpath);
+            }
+        }
+        return paths;
+    }
+
+    public static void printPaths() {
+        System.out.println("\nThe final previous list is " + previousList);
+
+        System.out.println("\n=================================================\n");
+        System.out.println("The final results are following.\n");
+        for (int i = 1; i &lt;= vertexCount; i++) {
+            if (i == start) {
+                continue;
+            }
+            System.out.println("Shortest path size from vertex " + start
+                    + " to vertex " + i + " is: " + distance[i]);
+            List&lt;List&lt;Integer&gt;&gt; paths = buildPaths(i);
+            for (int j = 0; j &lt; paths.size(); j++) {
+                List&lt;Integer&gt; path = paths.get(j);
+                System.out.print("\t\t Path " + j + ":   ");
+                System.out.print(start + "");
+                for (int k = 1; k &lt; path.size(); k++) {
+                    int w = weights[path.get(k - 1)][path.get(k)];
+                    System.out.print(" -(" + w + ")-&gt; " + path.get(k));
+                }
+                System.out.println("");
+            }
+        }
+    }
+
+    // index in matrix are from 1 to length-1
+    public static void printMatrix(int[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        System.out.print("  ");
+        for (int j = 1; j &lt; cols; j++) {
+            System.out.print("    " + j);
+        }
+        System.out.println(" ");
+        for (int j = 0; j &lt; cols; j++) {
+            System.out.print("-----");
+        }
+        System.out.println(" ");
+        for (int i = 1; i &lt; rows; i++) {
+            System.out.print(i + ":");
+            for (int j = 1; j &lt; cols; j++) {
+                if (matrix[i][j] &lt; Integer.MAX_VALUE) {
+                    System.out.print("    " + matrix[i][j]);
+                } else {
+                    System.out.print("    *");
+                }
+            }
+            System.out.println(" ");
+        }
+    }
+
+    public static void getGraphData1() {
+        vertexCount = 5;
+        edgeCount = 6;
+        weights = new int[vertexCount + 1][edgeCount + 1];
+        weights[1][2] = 5;
+        weights[1][3] = 8;
+        weights[2][3] = 1;
+        weights[2][4] = 3;
+        weights[4][5] = 7;
+        weights[2][5] = 2;
+    }
+
+    public static void getGraphData2() {
+        vertexCount = 9;
+        edgeCount = 12;
+        weights = new int[vertexCount + 1][vertexCount + 1];
+        weights[1][2] = 18;
+        weights[1][3] = 4;
+        weights[1][4] = 5;
+        weights[2][4] = 13;
+        weights[2][9] = 2;
+        weights[3][4] = 1;
+        weights[3][6] = 6;
+        weights[4][5] = 10;
+        weights[4][6] = 5;
+        weights[5][9] = 5;
+        weights[6][7] = 2;
+        weights[7][8] = 2;
+        weights[8][9] = 6;
+    }
+
+    public static void initGraphData() {
+        // getGraphData1();
+        getGraphData2();
+        for (int i = 1; i &lt;= vertexCount; i++) {
+            for (int j = 1; j &lt;= vertexCount; j++) {
+                if (i == j) {
+                    weights[i][j] = 0;
+                } else if (weights[i][j] &gt; 0) {
+                    weights[j][i] = weights[i][j];
+                } else {
+                    weights[i][j] = Integer.MAX_VALUE;
+                }
+            }
+        }
+
+        System.out.println("Adjacent Matrix of the Graph:\n");
+        printMatrix(weights);
+    }
+
+    public static void main(String[] argv) {
+
+        initGraphData();
+
+        start = 1;
+        System.out.println("\nTarget: Find all shortest paths from vertex " + start);
+        System.out.println("\n=================================================\n");
+
+        Dijkstra();
+
+        printPaths();
+    }
+
+}
+</code>
+</pre>	
+
+<P class="p2">The outputs when start from vertex 1</P>
+<pre class="codes">
+
+Adjacent Matrix of the Graph:
+
+      1    2    3    4    5    6    7    8    9 
+-------------------------------------------------- 
+1:    0    18    4    5    *    *    *    *    * 
+2:    18    0    *    13    *    *    *    *    2 
+3:    4    *    0    1    *    6    *    *    * 
+4:    5    13    1    0    10    5    *    *    * 
+5:    *    *    *    10    0    *    *    *    5 
+6:    *    *    6    5    *    0    2    *    * 
+7:    *    *    *    *    *    2    0    2    * 
+8:    *    *    *    *    *    *    2    0    6 
+9:    *    2    *    *    5    *    *    6    0 
+
+Target: Find all shortest paths from vertex 1
+
+=================================================
+
+The initialized previous list: {2=[1], 3=[1], 4=[1]}
+The initialized distance list: [0, 0, 18, 4, 5, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647]
+The initialized checked list: [false, true, false, false, false, false, false, false, false, false]
+
+=================================================
+
+The procedure of Dijkstra algorithms for this graph: 
+
+Vertex 3 is determined, and its shortest distance is 4
+		Equal distance found for vertex 4
+			Previous list updated as:{2=[1], 3=[1], 4=[1, 3]}
+		Relaxing vertex:6, and update its distance as:10
+			Previous list updated as:{2=[1], 3=[1], 4=[1, 3], 6=[3]}
+Vertex 4 is determined, and its shortest distance is 5
+		Equal distance found for vertex 2
+			Previous list updated as:{2=[1, 4], 3=[1], 4=[1, 3], 6=[3]}
+		Relaxing vertex:5, and update its distance as:15
+			Previous list updated as:{2=[1, 4], 3=[1], 4=[1, 3], 5=[4], 6=[3]}
+		Equal distance found for vertex 6
+			Previous list updated as:{2=[1, 4], 3=[1], 4=[1, 3], 5=[4], 6=[3, 4]}
+Vertex 6 is determined, and its shortest distance is 10
+		Relaxing vertex:7, and update its distance as:12
+			Previous list updated as:{2=[1, 4], 3=[1], 4=[1, 3], 5=[4], 6=[3, 4], 7=[6]}
+Vertex 7 is determined, and its shortest distance is 12
+		Relaxing vertex:8, and update its distance as:14
+			Previous list updated as:{2=[1, 4], 3=[1], 4=[1, 3], 5=[4], 6=[3, 4], 7=[6], 8=[7]}
+Vertex 8 is determined, and its shortest distance is 14
+		Relaxing vertex:9, and update its distance as:20
+			Previous list updated as:{2=[1, 4], 3=[1], 4=[1, 3], 5=[4], 6=[3, 4], 7=[6], 8=[7], 9=[8]}
+Vertex 5 is determined, and its shortest distance is 15
+		Equal distance found for vertex 9
+			Previous list updated as:{2=[1, 4], 3=[1], 4=[1, 3], 5=[4], 6=[3, 4], 7=[6], 8=[7], 9=[8, 5]}
+Vertex 2 is determined, and its shortest distance is 18
+		Equal distance found for vertex 9
+			Previous list updated as:{2=[1, 4], 3=[1], 4=[1, 3], 5=[4], 6=[3, 4], 7=[6], 8=[7], 9=[8, 5, 2]}
+Vertex 9 is determined, and its shortest distance is 20
+
+The final previous list is {2=[1, 4], 3=[1], 4=[1, 3], 5=[4], 6=[3, 4], 7=[6], 8=[7], 9=[8, 5, 2]}
+
+=================================================
+
+The final results are following.
+
+Shortest path size from vertex 1 to vertex 2 is: 18
+		 Path 0:   1 -(18)-> 2
+		 Path 1:   1 -(5)-> 4 -(13)-> 2
+		 Path 2:   1 -(4)-> 3 -(1)-> 4 -(13)-> 2
+Shortest path size from vertex 1 to vertex 3 is: 4
+		 Path 0:   1 -(4)-> 3
+Shortest path size from vertex 1 to vertex 4 is: 5
+		 Path 0:   1 -(5)-> 4
+		 Path 1:   1 -(4)-> 3 -(1)-> 4
+Shortest path size from vertex 1 to vertex 5 is: 15
+		 Path 0:   1 -(5)-> 4 -(10)-> 5
+		 Path 1:   1 -(4)-> 3 -(1)-> 4 -(10)-> 5
+Shortest path size from vertex 1 to vertex 6 is: 10
+		 Path 0:   1 -(4)-> 3 -(6)-> 6
+		 Path 1:   1 -(5)-> 4 -(5)-> 6
+		 Path 2:   1 -(4)-> 3 -(1)-> 4 -(5)-> 6
+Shortest path size from vertex 1 to vertex 7 is: 12
+		 Path 0:   1 -(4)-> 3 -(6)-> 6 -(2)-> 7
+		 Path 1:   1 -(5)-> 4 -(5)-> 6 -(2)-> 7
+		 Path 2:   1 -(4)-> 3 -(1)-> 4 -(5)-> 6 -(2)-> 7
+Shortest path size from vertex 1 to vertex 8 is: 14
+		 Path 0:   1 -(4)-> 3 -(6)-> 6 -(2)-> 7 -(2)-> 8
+		 Path 1:   1 -(5)-> 4 -(5)-> 6 -(2)-> 7 -(2)-> 8
+		 Path 2:   1 -(4)-> 3 -(1)-> 4 -(5)-> 6 -(2)-> 7 -(2)-> 8
+Shortest path size from vertex 1 to vertex 9 is: 20
+		 Path 0:   1 -(4)-> 3 -(6)-> 6 -(2)-> 7 -(2)-> 8 -(6)-> 9
+		 Path 1:   1 -(5)-> 4 -(5)-> 6 -(2)-> 7 -(2)-> 8 -(6)-> 9
+		 Path 2:   1 -(4)-> 3 -(1)-> 4 -(5)-> 6 -(2)-> 7 -(2)-> 8 -(6)-> 9
+		 Path 3:   1 -(5)-> 4 -(10)-> 5 -(5)-> 9
+		 Path 4:   1 -(4)-> 3 -(1)-> 4 -(10)-> 5 -(5)-> 9
+		 Path 5:   1 -(18)-> 2 -(2)-> 9
+		 Path 6:   1 -(5)-> 4 -(13)-> 2 -(2)-> 9
+		 Path 7:   1 -(4)-> 3 -(1)-> 4 -(13)-> 2 -(2)-> 9
+				
+</pre>	
+
+<P class="p2">The outputs when start from vertex 6</P>
+<pre class="codes">
+
+Adjacent Matrix of the Graph:
+
+      1    2    3    4    5    6    7    8    9 
+-------------------------------------------------- 
+1:    0    18    4    5    *    *    *    *    * 
+2:    18    0    *    13    *    *    *    *    2 
+3:    4    *    0    1    *    6    *    *    * 
+4:    5    13    1    0    10    5    *    *    * 
+5:    *    *    *    10    0    *    *    *    5 
+6:    *    *    6    5    *    0    2    *    * 
+7:    *    *    *    *    *    2    0    2    * 
+8:    *    *    *    *    *    *    2    0    6 
+9:    *    2    *    *    5    *    *    6    0 
+
+Target: Find all shortest paths from vertex 6
+
+=================================================
+
+The initialized previous list: {3=[6], 4=[6], 7=[6]}
+The initialized distance list: [0, 2147483647, 2147483647, 6, 5, 2147483647, 0, 2, 2147483647, 2147483647]
+The initialized checked list: [false, false, false, false, false, false, true, false, false, false]
+
+=================================================
+
+The procedure of Dijkstra algorithms for this graph: 
+
+Vertex 7 is determined, and its shortest distance is 2
+		Relaxing vertex:8, and update its distance as:4
+			Previous list updated as:{3=[6], 4=[6], 7=[6], 8=[7]}
+Vertex 8 is determined, and its shortest distance is 4
+		Relaxing vertex:9, and update its distance as:10
+			Previous list updated as:{3=[6], 4=[6], 7=[6], 8=[7], 9=[8]}
+Vertex 4 is determined, and its shortest distance is 5
+		Relaxing vertex:1, and update its distance as:10
+			Previous list updated as:{1=[4], 3=[6], 4=[6], 7=[6], 8=[7], 9=[8]}
+		Relaxing vertex:2, and update its distance as:18
+			Previous list updated as:{1=[4], 2=[4], 3=[6], 4=[6], 7=[6], 8=[7], 9=[8]}
+		Equal distance found for vertex 3
+			Previous list updated as:{1=[4], 2=[4], 3=[6, 4], 4=[6], 7=[6], 8=[7], 9=[8]}
+		Relaxing vertex:5, and update its distance as:15
+			Previous list updated as:{1=[4], 2=[4], 3=[6, 4], 4=[6], 5=[4], 7=[6], 8=[7], 9=[8]}
+Vertex 3 is determined, and its shortest distance is 6
+		Equal distance found for vertex 1
+			Previous list updated as:{1=[4, 3], 2=[4], 3=[6, 4], 4=[6], 5=[4], 7=[6], 8=[7], 9=[8]}
+Vertex 1 is determined, and its shortest distance is 10
+Vertex 9 is determined, and its shortest distance is 10
+		Relaxing vertex:2, and update its distance as:12
+			Previous list updated as:{1=[4, 3], 2=[9], 3=[6, 4], 4=[6], 5=[4], 7=[6], 8=[7], 9=[8]}
+		Equal distance found for vertex 5
+			Previous list updated as:{1=[4, 3], 2=[9], 3=[6, 4], 4=[6], 5=[4, 9], 7=[6], 8=[7], 9=[8]}
+Vertex 2 is determined, and its shortest distance is 12
+Vertex 5 is determined, and its shortest distance is 15
+
+The final previous list is {1=[4, 3], 2=[9], 3=[6, 4], 4=[6], 5=[4, 9], 7=[6], 8=[7], 9=[8]}
+
+=================================================
+
+The final results are following.
+
+Shortest path size from vertex 6 to vertex 1 is: 10
+		 Path 0:   6 -(5)-> 4 -(5)-> 1
+		 Path 1:   6 -(6)-> 3 -(4)-> 1
+		 Path 2:   6 -(5)-> 4 -(1)-> 3 -(4)-> 1
+Shortest path size from vertex 6 to vertex 2 is: 12
+		 Path 0:   6 -(2)-> 7 -(2)-> 8 -(6)-> 9 -(2)-> 2
+Shortest path size from vertex 6 to vertex 3 is: 6
+		 Path 0:   6 -(6)-> 3
+		 Path 1:   6 -(5)-> 4 -(1)-> 3
+Shortest path size from vertex 6 to vertex 4 is: 5
+		 Path 0:   6 -(5)-> 4
+Shortest path size from vertex 6 to vertex 5 is: 15
+		 Path 0:   6 -(5)-> 4 -(10)-> 5
+		 Path 1:   6 -(2)-> 7 -(2)-> 8 -(6)-> 9 -(5)-> 5
+Shortest path size from vertex 6 to vertex 7 is: 2
+		 Path 0:   6 -(2)-> 7
+Shortest path size from vertex 6 to vertex 8 is: 4
+		 Path 0:   6 -(2)-> 7 -(2)-> 8
+Shortest path size from vertex 6 to vertex 9 is: 10
+		 Path 0:   6 -(2)-> 7 -(2)-> 8 -(6)-> 9
+				
+</pre>	
+	
+</BR></BR>
+<a href="https://github.com/Mararsh/Vegetables"><img src="home.jpg" width=60px></a> 
+</body> 
+</html>

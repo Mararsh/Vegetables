@@ -1,0 +1,208 @@
+<html> 
+<head> 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        body {font-size:14px;
+		/*
+		font-family:
+			 -apple-system, BlinkMacSystemFont,
+			 "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+			 "Helvetica Neue", sans-serif;	
+		*/
+		}
+        p.p1 {text-indent: 0em; font-size:17px;font-weight:bold; color:darkgreen}
+        p.p2 {text-indent: 0em; font-size:15px;font-weight:bold}
+        p.p3 {text-indent: 0em; font-size:14px;font-weight:bold}
+		.article {width: 800px; margin:0 auto;font-size:14px;font-weight:normal;}
+        .paragraph {text-indent: 2em; font-size:13px;}
+        .link {text-indent: 6em; font-size:13px;}
+        .pix {text-indent: 6em; }
+        .refer {text-indent: 6em; font-size:13px; color:darkblue}
+        ol.inside {list-style-position: inside; text-indent: 2em;}
+        .description {font-size:14px; padding: 5px; background-color:#336633; font-weight:bord; color: white}
+        .codes {font-size:14px; padding: 5px; background-color:black; font-weight:normal; color: #CCFF99}
+		.table1 {font-size:14px; width:90%; border-collapse:collapse; border:solid 1px;}
+		tr {border:solid#000 1px;}
+		td {border:solid#000 1px; }
+		.Header { font-weight:bold; text-align:center;}
+		.Data {font-weight:normal; text-align:left; }
+		ul.inside {list-style-position: inside; text-indent: 2em;}
+    </style>
+</head> 
+<body class="article"> 
+<a href="https://github.com/Mararsh/Vegetables"><img src="home.jpg" width=60px></a> 
+
+<h2 align="center">利用Selenium实现网页自动化测试</h2>
+
+<P class="p1">工具 selenium</P>
+<P class="p2">资源地址</P>
+<P class="paragraph">selenium既可以用来做测试、也可以用来爬资源，是白黑两道都趁手的工具：</P>
+<P class="link"><a href="http://www.51testing.com/zhuanti/selenium.html" target="_blank">http://www.51testing.com/zhuanti/selenium.html</a></P>
+<P class="link"><a href="https://www.cnblogs.com/zhaof/p/6953241.html" target="_blank">https://www.cnblogs.com/zhaof/p/6953241.html</a></P>
+<P class="paragraph">selenium官网：</P>
+<P class="link"><a href="http://www.seleniumhq.org/" target="_blank">http://www.seleniumhq.org/</a></P>
+<P class="link"><a href="https://github.com/SeleniumHQ" target="_blank">https://github.com/SeleniumHQ</a></P>
+<P class="link"><a href="https://www.seleniumhq.org/download/" target="_blank">https://www.seleniumhq.org/download/</a></P>
+<P class="paragraph">selenium文档：</P>
+<P class="link"><a href="https://github.com/SeleniumHQ/docs" target="_blank">https://github.com/SeleniumHQ/docs</a></P>
+<P class="link"><a href="http://selenium-python.readthedocs.io/index.html" target="_blank">http://selenium-python.readthedocs.io/index.html</a></P>
+<P class="paragraph">Selenium发展史：</P>
+<P class="link"><a href="http://www.cnblogs.com/fnng/p/7426928.html" target="_blank">http://www.cnblogs.com/fnng/p/7426928.html</a></P>
+
+<P class="p2">关于Selenium IDE</P>
+<P class="paragraph">Selenium IDE可以自动录制用户的操作、然后保存为自动脚本。然而我已经放弃了使用Selenium IDE，因为我感觉直接编写脚本更顺手。</P>
+<P class="paragraph">如果要在FireFox中使用Selenium IDE，则会碰到麻烦：火狐48以后的版本支持Selenium3，火狐48之前的版本支持selenium2，<font color="red">而火狐55以后的新版本不支持SeleniumIDE！</font>以下是一个网友的描述：</P>
+<P class="refer">Firefox V48.0.2（V56.0也是OK的亲试）可实现完美兼容，需保证浏览器不自动更新。步骤如下：</P>
+<P class="refer">（1）火狐浏览器选择自定义安装（不要选择默认安装），取消勾选“安装维护服务”；</P>
+<P class="refer">（2）安装完成后，工具——选项——firefox更新——勾选“不检查更新”即可</P>
+<P class="refer">如果你已经安装了高版本的Firefox或者更新设置屡试不爽，可试试上面的方法！</P>
+<P class="paragraph">也就是退回到旧版本。以下是旧版火狐的下载地址：</P>
+<P class="link"><a href="http://ftp.mozilla.org/pub/firefox/releases/54.0/" target="_blank">http://ftp.mozilla.org/pub/firefox/releases/54.0/<a></P>
+<P class="paragraph">以下是来自官网的信息，开发者说：正在基于SideeX重写Selenium IDE，SideeX很慷慨地贡献了技术。</P>
+<P class="link"><a href="https://github.com/SeleniumHQ/selenium-ide" target="_blank">https://github.com/SeleniumHQ/selenium-ide<a></P>
+<DIV class="pix">   <img src="selenuim1.png"/></DIV></BR></BR>
+<P class="paragraph">以下是来自SideeX的描述：我们尊重和感谢Selenium开发了伟大实用的工具，现在由我们添砖加瓦了！</P>
+<P class="link"><a href="http://sideex.org/" target="_blank">http://sideex.org/<a></P>
+<DIV class="pix">     <img src="selenuim2.png"/></DIV></BR></BR>
+<P class="paragraph">来自开源世界的惺惺相惜真是让人羡慕啊！</P>
+
+
+<P class="p2">关于WebDriver</P>
+<P class="paragraph">WebDriver是W3C的一个标准，由Selenium主持：</P>
+<P class="link"><a href="https://w3c.github.io/webdriver/webdriver-spec.html" target="_blank">https://w3c.github.io/webdriver/webdriver-spec.html<a></P>
+<P class="paragraph">WebDriver之所以能够实现与浏览器进行交互，是因为浏览器实现了这些协议：</P>
+<P class="link"><a href="https://www.cnblogs.com/augus007/articles/7338195.html" target="_blank">https://www.cnblogs.com/augus007/articles/7338195.html<a></P>
+</BR>
+<P class="paragraph">以下网址归纳了各个浏览器驱动器的下载地址：</P>
+<P class="link"><a href="https://www.seleniumhq.org/download/" target="_blank">https://www.seleniumhq.org/download/<a></P>
+<P class="paragraph">firefox driver官方地址：</P>
+<P class="link"><a href="https://github.com/mozilla/geckodriver/" target="_blank">https://github.com/mozilla/geckodriver/<a></P>
+<P class="link"><a href="https://github.com/mozilla/geckodriver/releases/" target="_blank">https://github.com/mozilla/geckodriver/releases/<a></P>
+<P class="paragraph">chrome driver官方地址及国内镜像：</P>
+<P class="link"><a href="https://sites.google.com/a/chromium.org/chromedriver/home" target="_blank">https://sites.google.com/a/chromium.org/chromedriver/home<a></P>
+<P class="link"><a href="http://npm.taobao.org/mirrors/chromedriver/" target="_blank">http://npm.taobao.org/mirrors/chromedriver/<a></P>
+<P class="paragraph">Microsoft Web Driver官方地址：</P>
+<P class="link"><a href="http://go.microsoft.com/fwlink/?LinkId=619687" target="_blank">http://go.microsoft.com/fwlink/?LinkId=619687<a></P>
+
+<P class="p1">编程环境pycharm</P>
+<P class="p2">资源地址</P>
+<P class="paragraph">强大的IDE工具pycharm,免费开源的社区版够用，下载地址：</P>
+<P class="link"><a href="https://www.jetbrains.com/pycharm/?fromMenu" target="_blank">https://www.jetbrains.com/pycharm/?fromMenu<a></P>
+<P class="paragraph">pycharm的界面风格与Intelli IDEA一致，用过Android Studio的人打开pycharm后会感觉似乎在用AS。</P>
+
+<P class="p2">虚拟环境和python解释器的版本</P>
+<P class="paragraph">创建项目时，选择虚拟环境和python解释器的版本。</P>
+<DIV class="pix">     <img src="selenuim3.png"/></DIV></BR></BR>
+<P class="p2">管理Python包和Python库</P>
+<P class="paragraph">选择菜单项“File → Settings”，点击Project Interpreter，若要添加python包则点击按钮“+”：</P>
+<DIV class="pix">     <img src="selenuim4.png"/></DIV></BR></BR>
+<DIV class="pix">     <img src="selenuim5.png"/></DIV></BR></BR>
+<P class="paragraph">添加国内的资源库地址：https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/</P>
+<DIV class="pix">     <img src="selenuim6.png"/></DIV></BR></BR>
+
+<P class="p1">Selenium编程</P>
+<P class="p2">配置Python环境</P>
+<P class="paragraph">1）确保selenium包已添加项目的虚拟环境中</P>
+<P class="paragraph">2）下载所需的WebDriver，并复制到在系统PATH中的任何目录下，例如把它们放在python解释器目录下：</P>
+<DIV class="pix">     <img src="selenuim7.png"/></DIV></BR></BR>
+<P class="paragraph">3）网页元素定义id以便于Selenium脚本定位</P>
+
+<P class="p2">示例代码</P>
+<P class="paragraph">以下示例：打开firefox、访问网址、填写账号、点击按钮登录、查找网页菜单项、点击菜单项、退出：</P>
+<DIV class="pix">     <img src="selenuim8.png"/></DIV></BR></BR>
+<pre class="codes">
+# -*- coding: utf-8 -*-
+"""
+Title     : Example of using Selenium
+Created by: Mara
+Created on: 2018/4/23 12:24
+"""
+
+from selenium import webdriver
+from time import sleep
+from selenium.webdriver.common.action_chains import ActionChains
+import common_values
+
+
+def click_sub_menu(the_browser, main_item, sub_item):
+    main_menu = the_browser.find_element_by_id("topMenuForm:" + main_item)
+    ActionChains(the_browser).move_to_element(main_menu).perform()
+    sleep(common_values.PAGE_WAIT_SHOW_SECONDS)
+
+    sub_menu = the_browser.find_element_by_id("topMenuForm:" + sub_item)
+    ActionChains(the_browser).move_to_element(sub_menu).perform()
+    sleep(common_values.PAGE_WAIT_SHOW_SECONDS)
+    sub_menu.click()
+    sleep(common_values.PAGE_WAIT_SHOW_SECONDS)
+
+def logout(the_browser):
+    click_sub_menu(the_browser, "AccountMenu", "LogoutMenu")
+
+if __name__ == '__main__':
+    browser = webdriver.Firefox()
+    browser.get("http://localhost:8080/QXSKweb/faces/login.xhtml")
+    browser.implicitly_wait(10)
+    browser.maximize_window()
+
+    browser.find_element_by_id("logForm:user").send_keys("测试-普通用户")
+    browser.find_element_by_id("logForm:Pass").send_keys("TesterCommon")
+    browser.find_element_by_id("logForm:loginButton").click()
+
+    click_sub_menu(browser, "UserMenu", "UserSubMenu")
+
+    logout(browser)
+
+</pre>
+
+<P class="p2">常用selenuim代码</P>
+<P class="paragraph">以下是一些常用的selenuim代码：</P>
+<pre class="description">
+# 打开firefox 浏览器
+browser = webdriver.Firefox()
+
+# 访问地址
+browser.get(loginUrl)
+
+# 设置浏览器窗口
+browser.maximize_window()
+browser.set_window_size(1000, 800)
+browser.set_window_position(22, 33)
+
+# 操作页面
+browser.implicitly_wait(2)
+time.sleep(5)
+browser.back()
+browser.forward()
+
+#定位元素
+browser.find_element_by_id('kw1').send_keys("selenium")
+browser.find_element_by_xpath("//input[@id='kw1']").send_keys("selenium")
+browser.find_element_by_link_text("贴 吧").click()
+browser.find_element_by_partial_link_text("贴").click()
+browser.find_element_by_css_selector("#kw1").send_keys("selenium")
+browser.find_element_by_class_name("btn").click()
+
+# 操作元素
+browser.find_element_by_id("kw1").clear()
+browser.find_element_by_id('su1').click()
+browser.find_element_by_id('su1').submit()
+browser.find_element_by_xpath("//input[@id='kw1']").send_keys("selenium")
+browser.find_element_by_id('kw1').send_keys(Keys.ENTER)
+browser.find_element_by_id('kw1').send_keys(Keys.CONTROL, 'a')
+pswd = driver.find_element_by_id("password")
+
+# 鼠标双击事件 
+doubleclick(element)
+
+# 右键单击鼠标
+rightclick = ActionChains(driver)
+rightclick.context_click(pswd).perform()
+
+# 鼠标拖放事件 
+drag_and_drop(element, target) // element ,target 分别为原位置和目标位置
+</pre>
+
+
+<a href="https://github.com/Mararsh/Vegetables"><img src="home.jpg" width=60px></a> 
+</body> 
+</html>

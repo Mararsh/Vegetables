@@ -1,0 +1,75 @@
+<HTML>
+    <HEAD>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <style type="text/css">
+            .center { text-align:center;  max-width:95%; }
+table { border-collapse:collapse;  margin: 8px;}
+table, th, td { border: 1px solid; padding:8px;}
+th { font-weight:bold;  text-align:center;}
+tr { height: 1.2em;  }
+
+        </style>
+    </HEAD>
+    <BODY>
+<h1>PrimeFaces Templates in NetBeans</h1>
+<p>These are customized template files of PrimeFaces to generate JSF pages and their controllers automatically by NetBeans IDE.
+Original template files in NetBeans 8.2 are put here too to compare what changes are made.</p>
+<h3>Why customize the template files</h3>
+<hr />
+<p>NetBeans is the open source IDE provided by Oracle and represents latest techniques, especially in Java EE area. PrimeFaces is one of the JSF frames officially embedded in NetBeans.
+Following address is the tutorial about <a href="https://netbeans.org/kb/docs/web/jsf20-crud.html">&quot;Generating a JavaServer Faces 2.x CRUD Application from a Database&quot;</a></p>
+<p>Automatic generation of files in MVC model with NetBeans saved many efforts for my Java EE projects.
+Example, one of my project has 80 database tables. By using wizard &quot;New &gt; Entity Classes from Database&quot;, 80 JPA entities files are generated automatically in 1 minutes. Then by using wizard &quot;New &gt; JSF Pages from Entity Classes&quot;, 80 JPA session beans, 80 JSF controller beans, 320 JSF files, the language bundle file, and other support files are generated automatically in 5 minutes. The left thing is to modify or extend these files as project requirements.</p>
+<p>When default templates are not enough and some modification are common for all automatically generated JSF files, template files need be customized in NetBeans.</p>
+<h3>How to replace the template files</h3>
+<hr />
+<p>In NetBeans IDE, click the menu item &quot;Tools - Templates&quot; as following:
+<img src="https://mararsh.github.io/Vegetables/PrimeFaces_Templates_in_NetBeans/2.png" alt="snapshot" /></p>
+<p>Select template files under &quot;JavaServer Faces - JSF from Entity - PrimeFaces&quot; as following:
+<img src="https://mararsh.github.io/Vegetables/PrimeFaces_Templates_in_NetBeans/1.png" alt="snapshot" /></p>
+<p>Click button &quot;Open in Editor&quot;, and replace its contents with the customized file download from this repository.</p>
+<h3>Changes of the customized &quot;Controller.java&quot;</h3>
+<hr />
+<p>This file is used to generate all JSF beans automatically by NetBeans when select PrimeFaces template.
+Following snapshots show the main differences from original file:</p>
+<p><a href="https://mararsh.github.io/Vegetables/PrimeFaces_Templates_in_NetBeans/5.png">differences 1</a><br />
+<a href="https://mararsh.github.io/Vegetables/PrimeFaces_Templates_in_NetBeans/6.png">differences 2</a><br />
+<a href="https://mararsh.github.io/Vegetables/PrimeFaces_Templates_in_NetBeans/7.png">differences 3</a></p>
+<p>The major changes include:</p>
+<ol>
+    <li>Variables are changed from &quot;private&quot; to &quot;protected&quot; for convenience of inheriting generated beans to customized beans.</li>
+    <li>&quot;selectRows&quot; is defined for operations of multiple selection of rows.</li>
+    <li>&quot;needLoadItems&quot; is defined to replace &quot;items == null&quot; for re-querying data.</li>
+</ol>
+<h3>Changes of the customized &quot;Create.xhtml&quot; and &quot;Edit.xhtml&quot;</h3>
+<hr />
+<p>Following snapshot shows the main differences from original file:</p>
+<p><a href="https://mararsh.github.io/Vegetables/PrimeFaces_Templates_in_NetBeans/4.png">differences</a></p>
+<p>The major changes include:</p>
+<ol>
+    <li>Add specific template for the field of automatically increased id: It can not be input and is shown as a message like &quot;automatically generated&quot;.</li>
+    <li>Add specific template for the field of password: It is within component &quot;p:password&quot;.</li>
+    <li>Update template for field of dateTime: Its pattern, timeZone, and locale are defined and its calendar style is changed a little.</li>
+    <li>Add specific template for the field of &quot;createTime&quot; and &quot;recordTime&quot;: It can not be input and will be filled by beans automatically.</li>
+</ol>
+<p>Following snapshots show the generated &quot;Create.xhtml&quot; and &quot;Edit.xhtml&quot; with the customized template:
+<img src="https://mararsh.github.io/Vegetables/PrimeFaces_Templates_in_NetBeans/9.png" alt="snapshot" />
+<img src="https://mararsh.github.io/Vegetables/PrimeFaces_Templates_in_NetBeans/10.png" alt="snapshot" /></p>
+<h3>Changes of the customized &quot;List.xhtml&quot;</h3>
+<hr />
+<p>Following snapshot shows the main differences from original file:
+<a href="https://mararsh.github.io/Vegetables/PrimeFaces_Templates_in_NetBeans/3.png">differences</a></p>
+<p>The major changes include:</p>
+<ol>
+    <li>&quot;selectionMode&quot; is changed as &quot;multiple&quot;. And related ajax events are added.</li>
+    <li>Paginator is enriched with more elements and information.</li>
+    <li>Add toggler and tips in the header.</li>
+    <li>Columns can be sorted and filtered.</li>
+    <li>Fields of dateTime are defined with pattern, timeZone, and locale.</li>
+    <li>Multiple selection for deletion.</li>
+    <li>Confirm dialog when delete.</li>
+</ol>
+<p>Following snapshot shows the generated &quot;List.xhtml&quot; with the customized templates:
+<img src="https://mararsh.github.io/Vegetables/PrimeFaces_Templates_in_NetBeans/8.png" alt="snapshot" /></p>
+    </BODY>
+</HTML>

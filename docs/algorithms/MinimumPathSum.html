@@ -1,0 +1,84 @@
+ <html> 
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        body {font-size:14px;
+		/*
+		font-family:
+			 -apple-system, BlinkMacSystemFont,
+			 "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+			 "Helvetica Neue", sans-serif;	
+		*/
+		}
+        p.p1 {text-indent: 0em; font-size:17px;font-weight:bold; color:darkgreen}
+        p.p2 {text-indent: 0em; font-size:15px;font-weight:bold}
+        p.p3 {text-indent: 0em; font-size:14px;font-weight:bold}
+		.article {width: 800px; margin:0 auto;font-size:14px;font-weight:normal;}
+        .paragraph {text-indent: 2em; font-size:13px;}
+        .link {text-indent: 6em; font-size:13px;}
+        .pix {text-indent: 6em; }
+        .refer {text-indent: 6em; font-size:13px; color:darkblue}
+        ol.inside {list-style-position: inside; text-indent: 2em;}
+        .description {font-size:14px; padding: 5px; background-color:#336633; font-weight:bord; color: white}
+        .codes {font-size:14px; padding: 5px; background-color:black; font-weight:normal; color: #CCFF99}
+		.table1 {font-size:14px; width:90%; border-collapse:collapse; border:solid 1px;}
+		tr {border:solid#000 1px;}
+		td {border:solid#000 1px; }
+		.Header { font-weight:bold; text-align:center;}
+		.Data {font-weight:normal; text-align:left; }
+		ul.inside {list-style-position: inside; text-indent: 2em;}
+    </style>
+</head> 
+<body> 
+<body class="article"> 
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a> 
+
+<h2 align="center">110. Minimum Path Sum </h2>
+
+<P class="p2">Description of the Problem</P>
+<P class="link"><a href="" target="_blank"></a></P>
+<pre class="description">
+Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right 
+which minimizes the sum of all numbers along its path.
+
+</code>
+</pre>	
+
+<P class="p2">Idea to solve the problem</P>
+<P class="paragraph">Dynamic Programming</P>
+
+<P class="p2">My codes</P>
+<pre class="codes">
+<code>
+public class Solution {
+    /**
+     * @param grid: a list of lists of integers
+     * @return: An integer, minimizes the sum of all numbers along its path
+     */
+    // Total runtime 2366 ms. Your submission beats 65.80% Submissions!
+    public int minPathSum(int[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0].length == 0) return -1;
+        int rows =  grid.length;
+        int cols = grid[0].length;
+        int[][] min = new int[rows][cols];
+        min[0][0] = grid[0][0];
+        for (int j=1; j&lt; cols; j++) min[0][j] = grid[0][j] + min[0][j-1];
+        for (int i=1; i&lt; rows; i++) min[i][0] = grid[i][0] + min[i-1][0]; 
+        for (int i=1; i&lt; rows; i++) {
+          for (int j=1; j&lt;cols; j++) {
+            min[i][j] = grid[i][j] + Math.min(min[i-1][j], min[i][j-1]);
+          }
+        }
+        return min[rows-1][cols-1];
+    }
+}
+
+
+</code>
+</pre>
+
+
+
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a> 	
+</body> 
+</html>

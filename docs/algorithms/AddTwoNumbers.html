@@ -1,0 +1,118 @@
+ <html> 
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        body {font-size:14px;
+		/*
+		font-family:
+			 -apple-system, BlinkMacSystemFont,
+			 "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+			 "Helvetica Neue", sans-serif;	
+		*/
+		}
+        p.p1 {text-indent: 0em; font-size:17px;font-weight:bold; color:darkgreen}
+        p.p2 {text-indent: 0em; font-size:15px;font-weight:bold}
+        p.p3 {text-indent: 0em; font-size:14px;font-weight:bold}
+		.article {width: 800px; margin:0 auto;font-size:14px;font-weight:normal;}
+        .paragraph {text-indent: 2em; font-size:13px;}
+        .link {text-indent: 6em; font-size:13px;}
+        .pix {text-indent: 6em; }
+        .refer {text-indent: 6em; font-size:13px; color:darkblue}
+        ol.inside {list-style-position: inside; text-indent: 2em;}
+        .description {font-size:14px; padding: 5px; background-color:#336633; font-weight:bord; color: white}
+        .codes {font-size:14px; padding: 5px; background-color:black; font-weight:normal; color: #CCFF99}
+		.table1 {font-size:14px; width:90%; border-collapse:collapse; border:solid 1px;}
+		tr {border:solid#000 1px;}
+		td {border:solid#000 1px; }
+		.Header { font-weight:bold; text-align:center;}
+		.Data {font-weight:normal; text-align:left; }
+		ul.inside {list-style-position: inside; text-indent: 2em;}
+    </style>
+</head> 
+<body> 
+<body class="article"> 
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a> 
+
+<h2 align="center">167. Add Two Numbers</h2>
+
+<P class="p2">Description of the Problem</P>
+<P class="link"><a href="https://www.lintcode.com/problem/add-two-numbers/description" target="_blank">https://www.lintcode.com/problem/add-two-numbers/description</a></P>
+<pre class="description">
+
+167. Add Two Numbers
+
+You have two numbers represented by a linked list, where each node contains a single digit. 
+The digits are stored in reverse order, such that the 1's digit is at the head of the list. 
+Write a function that adds the two numbers and returns the sum as a linked list.
+Example
+
+Given 7->1->6 + 5->9->2. That is, 617 + 295.
+
+Return 2->1->9. That is 912.
+
+Given 3->1->5 and 5->9->2, return 8->0->8.
+
+</code>
+</pre>	
+
+<P class="p2">Idea to solve the problem</P>
+<P class="paragraph">Sum digit by digit with carry, as ever did in school</P>
+
+<P class="p2">My codes</P>
+<pre class="codes">
+<code>
+
+
+/**
+ * Definition for ListNode
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+
+public class Solution {
+    /**
+     * @param l1: the first list
+     * @param l2: the second list
+     * @return: the sum list of l1 and l2 
+     */
+     // Total runtime 1666 ms. Your submission beats 99.80% Submissions!
+    public ListNode addLists(ListNode l1, ListNode l2) {
+        return add(l1 ,l2, 0);
+    }
+    
+    public ListNode add(ListNode l1, ListNode l2, int carry) {
+        int sum = carry;
+        if (l1 != null) {
+            sum += l1.val;
+            l1 = l1.next;
+        }
+        if (l2 != null) {
+            sum += l2.val;
+            l2 = l2.next;
+        }
+        ListNode node = new ListNode(sum % 10);
+        carry = sum / 10;
+        if (l1 != null || l2 != null || carry == 1) {
+            ListNode sumNode = add(l1, l2, carry);
+            if (sumNode != null) {
+                node.next = sumNode;
+            }
+        }
+        return node;
+    }
+}
+
+</code>
+</pre>
+
+
+
+<a href="https://github.com/Mararsh/Vegetables"><img src="../home.jpg" width=60px></a> 	
+</body> 
+</html>
