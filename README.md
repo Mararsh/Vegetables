@@ -1,6 +1,3 @@
-## Welcome to my flowers garden
-
-I will use this field to plant some "flowers", including exerices of algorithms and techniques.
 
 ![tomato ](https://mararsh.github.io/Vegetables/tomato.png)
 [Solution of Avoiding "Stale Read" in Real-Time Data Flowing System](https://mararsh.github.io/Vegetables/solution_of_stale_read_en.html)
@@ -33,9 +30,4 @@ I will use this field to plant some "flowers", including exerices of algorithms 
 ![flower ](https://mararsh.github.io/Vegetables/flower3.png)
 [Exercise of Algorithms](https://mararsh.github.io/Vegetables/algorithms.html) 
 
-Below are visualization of sorting algorithms. You can set any data size and any interval of gif.
-The first graph is insertion sorting of size 6 from front to end in 1 second interval. The second graph is insertion sorting of size 10 from end to front in 0.3 second interval.
-
-![flower ](https://mararsh.github.io/Vegetables/algorithms/insertion_sort_in_front_6_1.gif)
-![flower ](https://mararsh.github.io/Vegetables/algorithms/insertion_sort_in_end_10_0.3.gif)
 
